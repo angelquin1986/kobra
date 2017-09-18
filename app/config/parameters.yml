@@ -1,7 +1,7 @@
 # This file is auto-generated during the composer install
 parameters:
     database_driver: pdo_mysql
-    database_host: localhost
+    database_host: 190.95.226.53
     database_port: 3306
     database_name: kobratest
     database_user: kobra
