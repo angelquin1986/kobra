@@ -1,0 +1,36 @@
+{#{% extends "FOSUserBundle::layout.html.twig" %}
+
+{% trans_default_domain 'FOSUserBundle' %}
+
+{% block fos_user_content %}
+<p>
+{{ 'resetting.check_email'|trans({'%email%': email}) }}
+</p>
+{% endblock %}#}
+
+
+
+
+
+{% extends 'baselogin.html.twig' %}
+
+{% trans_default_domain 'FOSUserBundle' %}
+
+{% block fos_user_content %}
+<div style="margin-top: 2%" class="alert alert-info alert-dismissable">
+            <i class="fa fa-info"></i>
+            <a href="{{path('fos_user_security_login')}}" class="btn btn-sm  bg-blue-gradient pull-right" type="button"><i class="fa fa-sign-in"></i> {{ 'layout.login'|trans }}</i></a>
+            <b>Informaci&oacute;n!</b> 
+            <p>
+                    {% for type, messages in app.session.flashbag.all() %}
+                        {% for message in messages %}
+                            
+                                {{ message }}
+                           
+                        {% endfor %}
+                    {% endfor %}
+                    <hr>
+                {{ 'resetting.check_email'|trans({'%email%': email}) }}
+            </p>
+       </div>    
+{% endblock fos_user_content %}

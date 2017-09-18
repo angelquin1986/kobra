@@ -1,0 +1,16 @@
+{% extends 'baselogin.html.twig' %}
+
+{% trans_default_domain 'FOSUserBundle' %}
+
+{% block fos_user_content %}
+<div style="margin-top: 2%" class="alert alert-info alert-dismissable">
+            <i class="fa fa-info"></i>
+    <p>{{ 'registration.confirmed'|trans({'%username%': user.username}) }}</p>
+    {% if app.session is not empty %}
+        {% set targetUrl = app.session.get('_security.' ~ app.security.token.providerKey ~ '.target_path') %}
+        {% if targetUrl is not empty %}<p><a class="btn btn-sm bg-blue-gradient" href="{{ path('index') }}"><i class="fa fa-arrow-circle-o-left"></i> {{ 'registration.back'|trans }}</a></p>{% endif %}
+    {% endif %}
+  </div>
+{% endblock fos_user_content %}
+        
+
