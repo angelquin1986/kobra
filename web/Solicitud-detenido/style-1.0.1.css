@@ -1,0 +1,204 @@
+body {
+	margin: 0;
+	padding: 0;
+	color: #000;
+}
+form {
+	width:100%;
+	height:100%;
+	margin: 0;
+	padding: 0;
+	color: #000;
+}
+
+TD {
+	LINE-HEIGHT: 1.5em; 
+	FONT-FAMILY: Arial, Helvetica, sans-serif; 
+	FONT-SIZE: 12px;
+}
+input:focus, select:focus, textarea:focus, checkbox:focus {
+	border:2px solid; 
+	border-color: #fa9f3d #fa9f3d #fa9f3d #fa9f3d;
+ 	background-color:#FFF;  
+	font-size:15px; 
+	padding: 2px;
+	border-radius: 5px;
+}
+input, select, SELECT, textarea, checkbox {
+	border:2px solid #00CCFF;
+	background-color:#EAF8FF;
+	padding: 2px;
+	border-radius: 5px; 
+}
+
+.Error{
+	border:2px double #FF0000;
+	background-color:#FFF4F0;
+	padding: 2px;
+	border-radius: 5px;
+}
+.Normal{
+	border:#FFF;
+	background-color #FFF;
+	padding: 2px;
+	border-radius: 5px;
+}
+input:disabled, select:disabled, textarea:disabled, checkbox:disabled {
+ 	border:2px solid #BBB;
+	background-color:#DDD;
+	padding: 2px;
+	border-radius: 5px;
+}
+.inputError, .selectError, .SELECTError .textareaError, .checkboxError{
+	border:2px solid #FF0000;
+	background-color:#FFF4F0;
+	padding: 2px;
+	border-radius: 5px;
+}
+.inputNormal, .selectNormal, .textareaNormal, .checkboxNormal  {
+ 	border:2px solid #00CCFF;
+	background-color:#EAF8FF;
+	padding: 2px;
+	border-radius: 5px; 
+}
+.FondoNegro {
+	FONT-FAMILY: tahoma,Arial, Helvetica, sans-serif; 
+	BACKGROUND: #000000; 
+	COLOR: #ffffff; 
+	FONT-SIZE: 18px; 
+	FONT-WEIGHT: bold;
+}
+.bgblue {
+	TEXT-ALIGN: right; 
+	WHITE-SPACE: nowrap; 
+	BACKGROUND: #cccccc; 
+	FONT-WEIGHT: bold; 
+	PADDING-TOP: 6px;
+}
+.bgblue2 {
+	TEXT-ALIGN: left; 
+	WHITE-SPACE: nowrap; 
+	BACKGROUND: #cccccc; 
+	FONT-WEIGHT: bold; 
+	PADDING-TOP: 6px;
+}
+.headerbg {
+	TEXT-INDENT: 3px; 
+	FONT-FAMILY: Arial, Helvetica, sans-serif; 
+	BACKGROUND: #4b688b ; 
+	HEIGHT: 35px;
+	COLOR: #ffffff; 
+	FONT-SIZE: 22px; 
+	FONT-WEIGHT: bold; 
+	alignment-adjust:centrale;
+	VERTICAL-ALIGN:bottom;
+}
+
+#formContenedor {
+	width: 800px;
+	margin: 0 auto; /* the auto value on the sides, coupled with the width, centers the layout */
+}
+
+#transparencia{
+	background-color:#333; 
+	z-index:1; 
+	position:fixed;
+	width:100%;
+	height:100%;
+	display:none;
+	opacity:0.98;
+	filter:alpha(opacity="95");
+}
+#transparenciaMensaje{
+	position:absolute;
+	width:30em;
+	height:17em;
+	margin-left: -17em; /*set to a negative number 1/2 of your width*/
+	margin-top: -7em; /*set to a negative number 1/2 of your hei*/
+	top:40%;
+	left:50%;
+}
+.redondiadas{
+	width:100%;
+	position:absolute;
+/*	background:#E9E9E9; 
+	border-radius:7px; 
+	-moz-border-radius:7px; 
+	-webkit-border-radius:7px;
+	border-bottom-left-radius:7px;
+	border-bottom-right-radius:7px; */
+	box-shadow:0px 0px 20px black; 
+	border: 3px solid #000; 
+	background: none repeat scroll 0 0 #F1F1F1;
+	border-radius:10px; 
+    margin: 2 auto;
+    padding: 10px; 
+	
+}
+.Mtitulo{
+	color: #000;
+	background-color: #999;
+	font-size:18px;
+	font-family:Arial;
+	height: 58px;
+}
+.Mcuerpo{
+	color:#000000;
+	font-size:14px;
+	font-family:Arial;	
+}
+.Copyright{
+	color:#000000;
+	font-size:10px;
+	font-family:Arial;	
+}
+
+button{
+	height: 30px;
+	border-width:0px;
+	float:none;
+/*	background-color:#00CCFF; */
+	border:2px solid #00CCFF;
+	FONT-FAMILY: Arial;
+	FONT-WEIGHT: bold;
+}
+
+.social1 {
+	position: fixed;
+	left: 0px;
+	right: 0px;
+	top: 1px; 
+/*	z-index: 20; */
+    width: 250px;
+}
+
+.social2 {
+	position: fixed;
+	right: 0;
+	top: 1px; 
+/*	z-index: 20; */
+    width: 250px;
+}
+
+.myButton {
+	-moz-box-shadow:inset 0px 1px 0px 0px #9acc85;
+	-webkit-box-shadow:inset 0px 1px 0px 0px #9acc85;
+	box-shadow:inset 0px 1px 0px 0px #9acc85;
+	background-color:#74ad5a;
+	border:1px solid #3b6e22;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:Arial;
+	font-size:9px;
+	font-weight:bold;
+	padding:2px 4px;
+	text-decoration:none;
+}
+.myButton:hover {
+	background-color:#68a54b;
+}
+.myButton:active {
+	position:relative;
+	top:1px;
+}

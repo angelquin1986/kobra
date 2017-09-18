@@ -1,0 +1,17 @@
+# This file is auto-generated during the composer install
+parameters:
+    database_driver: pdo_mysql
+    database_host: localhost
+    database_port: 3306
+    database_name: kobratest
+    database_user: kobra
+    database_password: Kobra12345$$
+    mailer_transport: smtp
+    mailer_host: smtp.gmail.com
+    mailer_user: emisiones@mymtravel.com
+    mailer_password: Emision$$14!
+    locale: es
+    secret: ThisTokenIsNotSoSecretChangeIt
+    debug_toolbar: true
+    debug_redirects: false
+    use_assetic_controller: true
