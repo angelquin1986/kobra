@@ -1,1 +1,0 @@
-<?php return unserialize('a:1:{i:0;O:33:"Gedmo\\Mapping\\Annotation\\Loggable":2:{s:13:"logEntryClass";s:39:"aplicacion\\AuditoriaBundle\\Entity\\Traza";s:5:"value";N;}}');
