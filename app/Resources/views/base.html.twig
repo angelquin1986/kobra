@@ -49,11 +49,12 @@
                                
                         </div>
                        <div class="pull-left info">
-                            <p class="text-info text-center">{{app.user.empresa.razonsocial}}</p>
+                           <!--Nombre empesa abajo del logo-->
+                           <p id="idOutRazonSocialAgencia" class="text-info text-center">{{app.user.empresa.razonsocial}}</p>
 
                         </div>
                         {%endif%}
-                        
+                        <!--informacion que se muestra cuando es agente externo>
                        {%if 'ROLE_AGENTE_EXTERNO' in app.user.roles %}    
                         <div class="text-center image">
                            {%if app.user.agencia.logo %}
@@ -64,7 +65,7 @@
                                
                         </div>
                        <div class="pull-left info">
-                            <p class="text-info">{{app.user.agencia.nombre}}</p>
+                           <p id="idOutNombreAgencia" class="text-info">{{app.user.agencia.nombre}}</p>
 
                         </div>
                         {%endif%}

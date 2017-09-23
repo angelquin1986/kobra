@@ -1,8 +1,20 @@
 {% extends 'BaseBundle:Masters:master.html.twig' %}
 
  {% block sidebar %} 
-
-     
+     <!--index agente.html.twig  
+     Perfil de usuario 
+     Cambiar Contrasenia
+     -->
+     <!--index agente.html.twig  
+     Dashboard 
+     Cambiar Contrasenia
+      Concialiar
+     -->
+     <!--supervisorcobranza.html.twig  
+     Dashboard 
+     Bloquear Habilitar
+      Concialiar
+     -->
                         {% if  'ROLE_AGENTE_EXTERNO' in  app.user.roles %}
                             {% include 'EmisionesBundle:Menu:agente.html.twig' %}
                         {%elseif 'ROLE_CAJA' in  app.user.roles%}

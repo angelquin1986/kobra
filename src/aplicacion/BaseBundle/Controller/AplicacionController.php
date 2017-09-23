@@ -11,7 +11,8 @@ class AplicacionController extends Controller
     
     public function indexAction()
     {
-        
+         $this->container->get('logger')->error('Local variables',  $this->getUser()->getRoles());
+        //echo '<script>console.log('+$this->getUser()+')</script>';
         if( in_array('ROLE_CAJA', $this->getUser()->getRoles()) || in_array('ROLE_SUPERVISOR_COBRANZA', $this->getUser()->getRoles()))
         {
            return $this->redirect($this->generateUrl('dashboard_cobranza'));
@@ -19,6 +20,11 @@ class AplicacionController extends Controller
         else if ( in_array('ROLE_AGENTE_EXTERNO', $this->getUser()->getRoles())) 
         {
             return $this->redirect($this->generateUrl('agente_vista_agente'));
+        }
+        else{
+            if ( in_array('ROLE_ADMINISTRADOR', $this->getUser()->getRoles()))  {
+                return $this->redirect($this->generateUrl('supervisor_agentes_agencias'));
+            }
         }
         return $this->render('BaseBundle:Masters:index.html.twig');
 

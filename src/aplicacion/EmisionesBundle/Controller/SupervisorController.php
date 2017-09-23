@@ -460,28 +460,9 @@ class SupervisorController extends RegistrationController
         
         return $form;
     }
-    public function editAction($id)
-    {
-        $em = $this->getDoctrine()->getManager();
-        $entity = $em->getRepository('EmisionesBundle:Agente')->find($id);
-
-        if (!$entity) {
-            $this->get('session')->getFlashBag()->add('error', 'El agente que usted desea editar no existe!');
-             return $this->redirect($this->generateUrl('supervisor_index_agentes'));
-        }
-        /*
-         * Obtener el id de la empresa del user firmado para que solo cargue
-         * las agencias asociadas y no el resto de las agencias que no estan asociadas 
-         */
-        $empresa_id=  $this->getUser()->getEmpresa()->getId();
-        $editForm = $this->createEditForm($entity,$empresa_id);
-        //$deleteForm = $this->createDeleteForm($id);
-
-        return $this->render('EmisionesBundle:SupervisorAdministrarAgentes/AdministrarAgentes:edit.html.twig', array(
-            'entity'      => $entity,
-            'edit_form'   => $editForm->createView(),
-            //'delete_form' => $deleteForm->createView(),
-        ));
+    
+    public function editAction($id){
+        return $this->editAgente($id, 'EmisionesBundle:SupervisorAdministrarAgentes/AdministrarAgentes:edit.html.twig');
     }
     public function editCounterAction($id)
     {
@@ -618,19 +599,11 @@ class SupervisorController extends RegistrationController
 
         return $form;
     }
-    public function newAction()
-    {
-        $entity = new Agente();
-        /*
-         * Obtener la empresa para pasarla al formulario y solo caragr la agencias que coprresponden al usuario firmado
-         */
-        $empresa_id=  $this->getUser()->getEmpresa()->getId();
-        $form   = $this->createCreateForm($entity,$empresa_id);
-        
-        return $this->render('EmisionesBundle:SupervisorAdministrarAgentes/AdministrarAgentes:new.html.twig', array(
-            'entity' => $entity,
-            'form'   => $form->createView(),
-        ));
+    /**
+     * Metodo para instanciar la creacion de un nuevo agente
+     */
+    public function newAction(){
+        return $this->newAgente('EmisionesBundle:SupervisorAdministrarAgentes/AdministrarAgentes:new.html.twig');
     }
     public function newCounterAction()
     {
@@ -646,15 +619,12 @@ class SupervisorController extends RegistrationController
             'form'   => $form->createView(),
         ));
     }
-    public function newAgenciaAction()
-    {
-        $entity = new Agencia();
-        $form   = $this->createCreateAgenciaForm($entity);
-
-        return $this->render('EmisionesBundle:SupervisorAdministrarAgentes/AdministrarAgencias:newAgencia.html.twig', array(
-            'entity' => $entity,
-            'form'   => $form->createView(),
-        ));
+    /**
+     * Metodo para instanciar la  una agencia para la creacion
+     * @return type
+     */
+    public function newAgenciaAction(){
+        return $this->newAgencia('EmisionesBundle:SupervisorAdministrarAgentes/AdministrarAgencias:newAgencia.html.twig');
     }
     public function newConfiguracionAction()
     {
@@ -923,7 +893,11 @@ class SupervisorController extends RegistrationController
 
         return $path.'_'.date("d-m-Y_H-i-s").'.'.$ext;    
     }
-    public function updateAction(Request $request, $id)
+    public function updateAction(Request $request, $id){
+        return $this->updateAgente($request, $id, 'EmisionesBundle:SupervisorAdministrarAgentes/AdministrarAgentes:edit.html.twig','supervisor_agente_edit');
+    }
+    
+    public function updateAgente(Request $request, $id,$renderParameter,$urldParameter)
     {
         
         $allowed = array('png', 'jpg', 'gif','jpeg');
@@ -955,7 +929,7 @@ class SupervisorController extends RegistrationController
                 $foto=  $this->crearNombre(10,$extension);
                 if(!in_array(strtolower($extension), $allowed)){
                        $this->get('session')->getFlashBag()->add('error', 'El fichero que usted adjunta no es permitido!');
-                       return $this->redirect($this->generateUrl('supervisor_agente_edit',array('id'=>$entity->getId())));
+                       return $this->redirect($this->generateUrl($urldParameter,array('id'=>$entity->getId())));
                 }
                 if($avatarold!='')
                 {   /*Eliminando el avatar viejo*/
@@ -977,14 +951,14 @@ class SupervisorController extends RegistrationController
             }
             $em->flush();
             $this->get('session')->getFlashBag()->add('success', "Su perfil ha sido actualizado!");
-            return $this->redirect($this->generateUrl('supervisor_agente_edit', array('id' => $id)));
+            return $this->redirect($this->generateUrl($urldParameter, array('id' => $id)));
         }
         else
         {
            $this->get('session')->getFlashBag()->add('error', "Ha ocurrido un error, por favor revise detalladamente los valores proporcionados!"); 
         }
 
-        return $this->render('EmisionesBundle:SupervisorAdministrarAgentes/AdministrarAgentes:edit.html.twig', array(
+        return $this->render($renderParameter, array(
             'entity'      => $entity,
             'edit_form'   => $editForm->createView(),
            // 'delete_form' => $deleteForm->createView(),
@@ -1454,82 +1428,82 @@ class SupervisorController extends RegistrationController
         return $this->redirect($this->generateUrl('supervisor_index_counters'));
     }
 
-    public function load_ajax_agentesAction()
-    {
-        $peticion = $this->getRequest();
-        $searchfilter = $peticion->request->get('search');
-        $searchfilter=$searchfilter['value'];
-        $pstart=$peticion->request->get('start');
-        $pend=$peticion->request->get('length');   
-        $draw=$peticion->request->get('draw');
-        $empresaid = $peticion->request->get('empresa_id');
-        $em= $this->getDoctrine()->getManager();        
-        $empresa = $em->getRepository('BaseBundle:Empresa')->find($empresaid);
-        $agencias= $em->getRepository('EmisionesBundle:Agencia')->findAll();
-        $agencias=$empresa->getAgencias();
-        //print_r(count($agencias));exit;
-        $agentes= array();
-        for ($j = 0; $j < count($agencias); $j++) {
-            $agents=$agencias[$j]->getAgentes();
-            for ($k = 0; $k < count($agents); $k++) {
-                $agentes[]=$agents[$k];
-            } 
-        }
-        if($searchfilter!='')
-        {
-         $agentes=  $this->applyFilterSearchAgentes($agentes, $searchfilter);
-        }
-        
-        //En este punto tengo el total de ordenes que cumple con los filtros
-        $result = array();       
-        $result['draw']=$draw;
-        $result['recordsTotal']=count($agentes);
-        $result['recordsFiltered']=count($agentes);        
-        $agentes= $this->reduce($pstart, $pend, $agentes);      
-        $cont=0;
-        $result['data'] = array();
-        for ($i = 0; $i < count($agentes); $i++) 
-        {     
-                $result['data'][$cont]['agencia']= $agentes[$i]->getAgencia()->__toString();
-                $result['data'][$cont]['nombre']= $agentes[$i]->__toString();
-                $result['data'][$cont]['usuario']= $agentes[$i]->getUserName();
-                $result['data'][$cont]['email']= $agentes[$i]->getEmail();
-                if($agentes[$i]->getSexo()=='M')
-                {
-                    $result['data'][$cont]['sexo']='fa fa-male';
-                }
-                if($agentes[$i]->getSexo()=='F')
-                {
-                    $result['data'][$cont]['sexo']='fa fa-female';
-                }            
-                if($agentes[$i]->isLocked())
-                {
-                    $result['data'][$cont]['bloqueado']='fa fa-lock';
-                }
-                else
-                {
-                    $result['data'][$cont]['bloqueado']='fa fa-unlock';
-                }
-                // verificar si esta habilitado o no el usuario
-                if($agentes[$i]->isEnabled())
-                {
-                    $result['data'][$cont]['habilitado']='fa fa-thumbs-o-up';
-                }
-                else
-                {
-                    $result['data'][$cont]['habilitado']='fa fa-thumbs-o-down';
-                }                
-                $result['data'][$cont]['celular']= $agentes[$i]->getCelular();
-                $result['data'][$cont]['editar']= $this->generateUrl('supervisor_agente_edit', array('id' => $agentes[$i]->getId()));               
-                $result['data'][$cont]['chpass']= $this->generateUrl('supervisor_agente_edit_clave', array('id' => $agentes[$i]->getId()));
-                $result['data'][$cont]['lockUnlock']= $this->generateUrl('supervisor_lock_unlock_agente', array('id' => $agentes[$i]->getId()));
-                $result['data'][$cont]['unableEnable']= $this->generateUrl('supervisor_unable_enable_agente', array('id' => $agentes[$i]->getId()));
-                $result['data'][$cont]['id']= $agentes[$i]->getId();              
-                $cont++;
-        }
-      
-       //print_r($result);exit;
-       return new Response(json_encode($result));
+    public function load_ajax_agentesAction(){
+        return $this->load_ajax_agentes('supervisor_agente_edit','supervisor_agente_edit_clave','supervisor_lock_unlock_agente','supervisor_unable_enable_agente');
+//        $peticion = $this->getRequest();
+//        $searchfilter = $peticion->request->get('search');
+//        $searchfilter=$searchfilter['value'];
+//        $pstart=$peticion->request->get('start');
+//        $pend=$peticion->request->get('length');   
+//        $draw=$peticion->request->get('draw');
+//        $empresaid = $peticion->request->get('empresa_id');
+//        $em= $this->getDoctrine()->getManager();        
+//        $empresa = $em->getRepository('BaseBundle:Empresa')->find($empresaid);
+//        $agencias= $em->getRepository('EmisionesBundle:Agencia')->findAll();
+//        $agencias=$empresa->getAgencias();
+//        //print_r(count($agencias));exit;
+//        $agentes= array();
+//        for ($j = 0; $j < count($agencias); $j++) {
+//            $agents=$agencias[$j]->getAgentes();
+//            for ($k = 0; $k < count($agents); $k++) {
+//                $agentes[]=$agents[$k];
+//            } 
+//        }
+//        if($searchfilter!='')
+//        {
+//         $agentes=  $this->applyFilterSearchAgentes($agentes, $searchfilter);
+//        }
+//        
+//        //En este punto tengo el total de ordenes que cumple con los filtros
+//        $result = array();       
+//        $result['draw']=$draw;
+//        $result['recordsTotal']=count($agentes);
+//        $result['recordsFiltered']=count($agentes);        
+//        $agentes= $this->reduce($pstart, $pend, $agentes);      
+//        $cont=0;
+//        $result['data'] = array();
+//        for ($i = 0; $i < count($agentes); $i++) 
+//        {     
+//                $result['data'][$cont]['agencia']= $agentes[$i]->getAgencia()->__toString();
+//                $result['data'][$cont]['nombre']= $agentes[$i]->__toString();
+//                $result['data'][$cont]['usuario']= $agentes[$i]->getUserName();
+//                $result['data'][$cont]['email']= $agentes[$i]->getEmail();
+//                if($agentes[$i]->getSexo()=='M')
+//                {
+//                    $result['data'][$cont]['sexo']='fa fa-male';
+//                }
+//                if($agentes[$i]->getSexo()=='F')
+//                {
+//                    $result['data'][$cont]['sexo']='fa fa-female';
+//                }            
+//                if($agentes[$i]->isLocked())
+//                {
+//                    $result['data'][$cont]['bloqueado']='fa fa-lock';
+//                }
+//                else
+//                {
+//                    $result['data'][$cont]['bloqueado']='fa fa-unlock';
+//                }
+//                // verificar si esta habilitado o no el usuario
+//                if($agentes[$i]->isEnabled())
+//                {
+//                    $result['data'][$cont]['habilitado']='fa fa-thumbs-o-up';
+//                }
+//                else
+//                {
+//                    $result['data'][$cont]['habilitado']='fa fa-thumbs-o-down';
+//                }                
+//                $result['data'][$cont]['celular']= $agentes[$i]->getCelular();
+//                $result['data'][$cont]['editar']= $this->generateUrl('supervisor_agente_edit', array('id' => $agentes[$i]->getId()));               
+//                $result['data'][$cont]['chpass']= $this->generateUrl('supervisor_agente_edit_clave', array('id' => $agentes[$i]->getId()));
+//                $result['data'][$cont]['lockUnlock']= $this->generateUrl('supervisor_lock_unlock_agente', array('id' => $agentes[$i]->getId()));
+//                $result['data'][$cont]['unableEnable']= $this->generateUrl('supervisor_unable_enable_agente', array('id' => $agentes[$i]->getId()));
+//                $result['data'][$cont]['id']= $agentes[$i]->getId();              
+//                $cont++;
+//        }
+//      
+//       //print_r($result);exit;
+//       return new Response(json_encode($result));
     
     }
     
@@ -2407,4 +2381,171 @@ class SupervisorController extends RegistrationController
         $grid->addExport($csvExport);
         return $grid->getGridResponse('EmisionesBundle:SupervisorAdministrarAgentes/Reportes:incumplimientoSla.html.twig');
     }
+    
+     public function indexSupervisorAdministradorAction(){
+        return $this->render('EmisionesBundle:Supervisor:index.html.twig');
+    }
+    public function indexAgenciaAdmAction(){
+        return $this->render('EmisionesBundle:Supervisor/agencias:indexAgencias.html.twig', array(
+        ));
+    }
+    public function newAgenciaAdmAction(){
+        $this->newAgencia('EmisionesBundle:Supervisor/agencias:newAgencia.html.twig');
+    }
+    
+    public function indexAgenteAdmAction(){
+        return $this->render('EmisionesBundle:Supervisor/agentes:index.html.twig', array(
+        ));
+    }
+    public function newAgenteAdmAction(){
+        return $this->newAgente('EmisionesBundle:Supervisor/agentes:new.html.twig');
+    }
+    
+    /**
+     * Metodos generales 
+     */
+    public function newAgente($renderParameter){
+         $entity = new Agente();
+        /*
+         * Obtener la empresa para pasarla al formulario y solo caragr la agencias que coprresponden al usuario firmado
+         */
+        $empresa_id =  $this->getUser()->getEmpresa()->getId();
+        $form  = $this->createCreateForm($entity,$empresa_id);
+        
+        return $this->render($renderParameter, array(
+            'entity' => $entity,
+            'form'   => $form->createView(),
+        ));
+    }
+    
+     public function newAgencia($renderParameter){
+        $entity = new Agencia();
+        $form   = $this->createCreateAgenciaForm($entity);
+        return $this->render($renderParameter, array(
+            'entity' => $entity,
+            'form'   => $form->createView(),
+        ));
+    }
+    
+    public function load_ajax_agentesAdminAction(){
+       return  $this->load_ajax_agentes('supervisor_adm_edit_agente',
+                'supervisor_adm_edit_clave_agente', 
+                'supervisor_adm_lock_unlock_agente',
+                'supervisor_adm_unable_enable_agente');
+    }
+    
+    /**
+     * 
+     * @return ResponseMetodo general para cargar la date de la tabla a mostrar los agentes
+     */
+    public function load_ajax_agentes($urlEditarParam,$urlChpassrParam,$lockUnlockParam,$unableEnableParam)
+    {
+        $peticion = $this->getRequest();
+        $searchfilter = $peticion->request->get('search');
+        $searchfilter=$searchfilter['value'];
+        $pstart=$peticion->request->get('start');
+        $pend=$peticion->request->get('length');   
+        $draw=$peticion->request->get('draw');
+        $empresaid = $peticion->request->get('empresa_id');
+        $em= $this->getDoctrine()->getManager();        
+        $empresa = $em->getRepository('BaseBundle:Empresa')->find($empresaid);
+        $agencias= $em->getRepository('EmisionesBundle:Agencia')->findAll();
+        $agencias=$empresa->getAgencias();
+        //print_r(count($agencias));exit;
+        $agentes= array();
+        for ($j = 0; $j < count($agencias); $j++) {
+            $agents=$agencias[$j]->getAgentes();
+            for ($k = 0; $k < count($agents); $k++) {
+                $agentes[]=$agents[$k];
+            } 
+        }
+        if($searchfilter!='')
+        {
+         $agentes=  $this->applyFilterSearchAgentes($agentes, $searchfilter);
+        }
+        
+        //En este punto tengo el total de ordenes que cumple con los filtros
+        $result = array();       
+        $result['draw']=$draw;
+        $result['recordsTotal']=count($agentes);
+        $result['recordsFiltered']=count($agentes);        
+        $agentes= $this->reduce($pstart, $pend, $agentes);      
+        $cont=0;
+        $result['data'] = array();
+        for ($i = 0; $i < count($agentes); $i++) 
+        {     
+                $result['data'][$cont]['agencia']= $agentes[$i]->getAgencia()->__toString();
+                $result['data'][$cont]['nombre']= $agentes[$i]->__toString();
+                $result['data'][$cont]['usuario']= $agentes[$i]->getUserName();
+                $result['data'][$cont]['email']= $agentes[$i]->getEmail();
+                if($agentes[$i]->getSexo()=='M')
+                {
+                    $result['data'][$cont]['sexo']='fa fa-male';
+                }
+                if($agentes[$i]->getSexo()=='F')
+                {
+                    $result['data'][$cont]['sexo']='fa fa-female';
+                }            
+                if($agentes[$i]->isLocked())
+                {
+                    $result['data'][$cont]['bloqueado']='fa fa-lock';
+                }
+                else
+                {
+                    $result['data'][$cont]['bloqueado']='fa fa-unlock';
+                }
+                // verificar si esta habilitado o no el usuario
+                if($agentes[$i]->isEnabled())
+                {
+                    $result['data'][$cont]['habilitado']='fa fa-thumbs-o-up';
+                }
+                else
+                {
+                    $result['data'][$cont]['habilitado']='fa fa-thumbs-o-down';
+                }                
+                $result['data'][$cont]['celular']= $agentes[$i]->getCelular();
+                $result['data'][$cont]['editar']= $this->generateUrl($urlEditarParam, array('id' => $agentes[$i]->getId()));               
+                $result['data'][$cont]['chpass']= $this->generateUrl($urlChpassrParam, array('id' => $agentes[$i]->getId()));
+                $result['data'][$cont]['lockUnlock']= $this->generateUrl($lockUnlockParam, array('id' => $agentes[$i]->getId()));
+                $result['data'][$cont]['unableEnable']= $this->generateUrl($unableEnableParam, array('id' => $agentes[$i]->getId()));
+                $result['data'][$cont]['id']= $agentes[$i]->getId();              
+                $cont++;
+        }
+      
+       //print_r($result);exit;
+       return new Response(json_encode($result));
+    
+    }
+    
+    public function editAgente($id,$urlEditarParam)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $entity = $em->getRepository('EmisionesBundle:Agente')->find($id);
+
+        if (!$entity) {
+            $this->get('session')->getFlashBag()->add('error', 'El agente que usted desea editar no existe!');
+             return $this->redirect($this->generateUrl('supervisor_index_agentes'));
+        }
+        /*
+         * Obtener el id de la empresa del user firmado para que solo cargue
+         * las agencias asociadas y no el resto de las agencias que no estan asociadas 
+         */
+        $empresa_id=  $this->getUser()->getEmpresa()->getId();
+        $editForm = $this->createEditForm($entity,$empresa_id);
+        //$deleteForm = $this->createDeleteForm($id);
+
+        return $this->render($urlEditarParam, array(
+            'entity'      => $entity,
+            'edit_form'   => $editForm->createView(),
+            //'delete_form' => $deleteForm->createView(),
+        ));
+    }
+    
+    public function  editAgenteAdmAction($id){
+        return $this->editAgente($id,'EmisionesBundle:Supervisor/agentes:edit.html.twig');
+    }
+    
+    public function  updateAgenteAdmAction(Request $request, $id){
+        return $this->updateAgente($request, $id,'EmisionesBundle:Supervisor/agentes:edit.html.twig','supervisor_adm_edit_agente');
+    } 
 }

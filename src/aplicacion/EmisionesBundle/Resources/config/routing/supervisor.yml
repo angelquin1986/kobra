@@ -233,9 +233,47 @@ supervisor_register_configuracion:
 supervisor_asignar_manual:
     path:     /asignar/manual/{id}/
     defaults: { _controller: "EmisionesBundle:Supervisor:asignarManual" }
+#url para la pantalla de supervisor administrador
+supervisor_agentes_agencias:
+    path:     /administrador/
+    defaults: { _controller: "EmisionesBundle:Supervisor:indexSupervisorAdministrador" }
+
+supervisor_adm_index_agencias:
+    path:     /agenciasAdm/
+    defaults: { _controller: "EmisionesBundle:Supervisor:indexAgenciaAdm" } 
+ 
+supervisor_adm_new_agencia:
+    path:     /agenciasNewAdm/
+    defaults: { _controller: "EmisionesBundle:Supervisor:newAgenciaAdm" } 
     
+supervisor_adm_index_agente:
+    path:     /agenteAdm/
+    defaults: { _controller: "EmisionesBundle:Supervisor:indexAgenteAdm" } 
 
+supervisor_adm_new_agente:
+    path:     /agenteNewAdm/
+    defaults: { _controller: "EmisionesBundle:Supervisor:newAgenteAdm" } 
 
+load_agentesAdm_ajax:
+    path:     /load/agentesAdm/ajax
+    defaults: { _controller: "EmisionesBundle:Supervisor:load_ajax_agentesAdmin" }
     
+supervisor_adm_edit_agente:
+    path:     /agente/{id}/editAdm/
+    defaults: { _controller: "EmisionesBundle:Supervisor:editAgenteAdm" }
 
+supervisor_adm_edit_clave_agente:
+    path:     /agente/{id}/render/agenteClaveAdm/
+    defaults: { _controller: "EmisionesBundle:Supervisor:editClaveAgenteAdm" }
+    
+supervisor_adm_lock_unlock_agente:
+    path:     /lock_unlock/agenteAdm/{id}/
+    defaults: { _controller: "EmisionesBundle:Supervisor:lock_unlockAgenteAdm" }
+    
+supervisor_adm_unable_enable_agente:
+    path:     /unable_enable/agenteAdm/{id}/
+    defaults: { _controller: "EmisionesBundle:Supervisor:unable_enableAgenteAdm" }
 
+supervisor_agenteAdm_update:
+    path:     /agenteAdm/{id}/update/
+    defaults: { _controller: "EmisionesBundle:Supervisor:updateAgenteAdm" } 
