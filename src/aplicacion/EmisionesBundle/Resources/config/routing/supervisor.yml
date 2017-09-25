@@ -98,6 +98,10 @@ supervisor_load_agencias_ajax:
     path:     /load/agencias/ajax
     defaults: { _controller: "EmisionesBundle:Supervisor:load_ajax_agencias" }
     
+supervisor_load_agenciasAdm_ajax:
+    path:     /load/agenciasAdm/ajax
+    defaults: { _controller: "EmisionesBundle:Supervisor:load_ajax_agenciasAdm" }
+    
 supervisor_agente_edit:
     path:     /agente/{id}/edit/
     defaults: { _controller: "EmisionesBundle:Supervisor:edit" }
@@ -109,6 +113,10 @@ supervisor_counter_edit:
 supervisor_agencia_edit:
     path:     /agencia/{id}/edit/
     defaults: { _controller: "EmisionesBundle:Supervisor:editAgencia" }
+
+supervisor_agenciaAdm_edit:
+    path:     /agenciaAdm/{id}/edit/
+    defaults: { _controller: "EmisionesBundle:Supervisor:editAgenciaAdm" }
     
 supervisor_empresa_edit:
     path:     /empresa/{id}/edit/
@@ -141,6 +149,10 @@ supervisor_lock_unlock_counter:
 supervisor_member_unmember_agencia:
     path:     /member_unmember/{id}/{id_empresa}/
     defaults: { _controller: "EmisionesBundle:Supervisor:member_unmember" }
+
+supervisor_member_unmember_agenciaAdm:
+    path:     /member_unmember/{id}/{id_empresa}/agenciaAdm
+    defaults: { _controller: "EmisionesBundle:Supervisor:member_unmemberAdm" }
     
 supervisor_unable_enable_agente:
     path:     /unable_enable/agente/{id}/
@@ -189,10 +201,18 @@ supervisor_empresa_update:
 supervisor_agencia_update:
     path:     /agencia/{id}/update/
     defaults: { _controller: "EmisionesBundle:Supervisor:updateAgencia" }  
+ 
+supervisor_agenciaAdm_update:
+    path:     /agenciaAdm/{id}/update/
+    defaults: { _controller: "EmisionesBundle:Supervisor:updateAgenciaAdm" } 
     
 supervisor_agente_update_clave:
     path:     /agente/{id}/update/clave/
     defaults: { _controller: "EmisionesBundle:Supervisor:updateClave" }
+    
+supervisor_agenteAdm_update_clave:
+    path:     /agenteAdm/{id}/update/clave/
+    defaults: { _controller: "EmisionesBundle:Supervisor:updateClaveAdm" }
     
 supervisor_counter_update_clave:
     path:     /counter/{id}/update/clave/
@@ -225,6 +245,10 @@ supervisor_register_counter:
 supervisor_register_agencia:
     path:     /agencia/register/
     defaults: { _controller: "EmisionesBundle:Supervisor:registerAgencia" }
+
+supervisor_register_agenciaAdm:
+    path:     /agenciaAdm/register/
+    defaults: { _controller: "EmisionesBundle:Supervisor:registerAgenciaAdm" }
     
 supervisor_register_configuracion:
     path:     /configuracion/register/
@@ -277,3 +301,7 @@ supervisor_adm_unable_enable_agente:
 supervisor_agenteAdm_update:
     path:     /agenteAdm/{id}/update/
     defaults: { _controller: "EmisionesBundle:Supervisor:updateAgenteAdm" } 
+    
+supervisor_register_agenteAdm:
+    path:     /agenteAdm/register/
+    defaults: { _controller: "EmisionesBundle:Supervisor:registerAdm" }

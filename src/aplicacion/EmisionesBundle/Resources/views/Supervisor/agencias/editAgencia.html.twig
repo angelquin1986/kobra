@@ -11,7 +11,7 @@
 
     
 {% block sidebar %} 
-          {% include 'EmisionesBundle:Menu:supervisor_agente_agencia.html.html.twig' %}
+          {% include 'EmisionesBundle:Menu:supervisor_agente_agencia.html.twig' %}
  {% endblock %}
                         
 {%block titlepage %}
@@ -31,14 +31,14 @@
      <div class="box box-primary" >
                                 <div class="box-header">
                                     <div class="pull-left box-tools">
-                                        <a href="{{path('supervisor_new_agencia')}}" title="" data-toggle="tooltip"  class="btn btn-sm btn-bg bg-blue btn-circle" data-original-title="Adicionar"><i class="fa fa-plus"></i></a>
-                                        <a href="{{path('supervisor_index_agencias')}}" title="" data-toggle="tooltip"  class="btn btn-sm btn-bg bg-navy btn-circle" data-original-title="Listar"><i class="fa fa-list"></i></a>
+                                        <a href="{{path('supervisor_adm_new_agencia')}}" title="" data-toggle="tooltip"  class="btn btn-sm btn-bg bg-blue btn-circle" data-original-title="Adicionar"><i class="fa fa-plus"></i></a>
+                                        <a href="{{path('supervisor_adm_index_agencias')}}" title="" data-toggle="tooltip"  class="btn btn-sm btn-bg bg-navy btn-circle" data-original-title="Listar"><i class="fa fa-list"></i></a>
                                     </div>
                                     <h3 class="box-title pull-right">Editar Agencia</h3>
                                    
                                 </div><!-- /.box-header -->
                                 <div class="box-body table-responsive">
-                                    <form action="{{path('supervisor_agencia_update',{'id':entity.id})}}" {{form_enctype(edit_form) }} method="post" >
+                                    <form action="{{path('supervisor_agenciaAdm_update',{'id':entity.id})}}" {{form_enctype(edit_form) }} method="post" >
                                       
                                         <div style="margin-left: 40%;" class="form-group">
                                                 <img style="width: 20%;" alt="User Image" id="userimage" class="img-responsive img-rounded img-thumbnail" src="

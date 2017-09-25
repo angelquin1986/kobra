@@ -479,20 +479,27 @@ class SupervisorController extends RegistrationController
             'edit_form'   => $editForm->createView(),
         ));
     }
-    public function editAgenciaAction($id)
-    {
+    public function editAgenciaAction($id){
+       return  $this->editAgencia($id, 'supervisor_index_agencias', 'EmisionesBundle:SupervisorAdministrarAgentes/AdministrarAgencias:editAgencia.html.twig');
+    }
+    
+     public function editAgenciaAdmAction($id){
+       return  $this->editAgencia($id, 'supervisor_adm_index_agencias', 'EmisionesBundle:Supervisor/agencias:editAgencia.html.twig');
+    }
+    
+    public function editAgencia($id,$urlindexParameter,$renderParameter){
         $em = $this->getDoctrine()->getManager();
         $entity = $em->getRepository('EmisionesBundle:Agencia')->find($id);
 
         if (!$entity) {
              $this->get('session')->getFlashBag()->add('error', 'La agencia que usted desea editar no existe o no esta asociada a su empresa!');
-             return $this->redirect($this->generateUrl('supervisor_index_agencias'));
+             return $this->redirect($this->generateUrl($urlindexParameter));
         }
         
         $editForm = $this->createEditAgenciaForm($entity);
         
 
-        return $this->render('EmisionesBundle:SupervisorAdministrarAgentes/AdministrarAgencias:editAgencia.html.twig', array(
+        return $this->render($renderParameter, array(
             'entity'      => $entity,
             'edit_form'   => $editForm->createView()            
         ));
@@ -638,8 +645,18 @@ class SupervisorController extends RegistrationController
         ));
     }
     
-    public function registerAgenciaAction(Request $request)
-    {
+    public function registerAgenciaAction(Request $request){
+      return   $this->registerAgencia($request,
+                'supervisor_new_agencia',
+                'EmisionesBundle:SupervisorAdministrarAgentes/AdministrarAgencias:newAgencia.html.twig');
+    }
+    
+    public function registerAgenciaAdmAction(Request $request){
+       return $this->registerAgencia($request,
+                'supervisor_adm_new_agencia',
+                'EmisionesBundle:Supervisor/agencias:newAgencia.html.twig');
+    }
+    public function registerAgencia(Request $request,$urlParameter,$renderPamameter){
         $allowed = array('png', 'jpg', 'gif','jpeg');
         $em = $this->getDoctrine()->getManager();
         $path = $this->container->getParameter('aplicacion.directorio.imagenes.agencias');
@@ -656,7 +673,7 @@ class SupervisorController extends RegistrationController
                 $foto=  $this->crearNombre(10,$extension);
                 if(!in_array(strtolower($extension), $allowed)){
                        $this->get('session')->getFlashBag()->add('error', 'El fichero que usted adjunta no es permitido!');
-                       return $this->redirect($this->generateUrl('supervisor_new_agencia',array()));
+                       return $this->redirect($this->generateUrl($urlParameter,array()));
                 }
                 
 
@@ -671,21 +688,25 @@ class SupervisorController extends RegistrationController
             $empresa->addAgencia($entity);
             $em->flush();
             $this->get('session')->getFlashBag()->add('success', 'La agencia ha sido agregada y asociada s su empresa satisfactoriamente!');
-            return $this->redirect($this->generateUrl('supervisor_new_agencia', array()));
+            return $this->redirect($this->generateUrl($urlParameter, array()));
         }
         else
         {
             $this->get('session')->getFlashBag()->add('error', 'Ha ocurrido un error al enviar los datos de la agencia, por favor revise cuidadosamente los valores proporcionados en cada unos de los campos requeridos!');
         }
         
-        return $this->render('EmisionesBundle:SupervisorAdministrarAgentes/AdministrarAgencias:newAgencia.html.twig', array(
+        return $this->render($renderPamameter, array(
             'entity' => $entity,
             'form'   => $form->createView(),
         ));
     }
+    public function registerAction(Request $request){   
+        return $this->registerAgente($request,
+                'EmisionesBundle:SupervisorAdministrarAgentes/AdministrarAgentes:new.html.twig',
+                'supervisor_new_agente');   
+    }
     
-    public function registerAction(Request $request)
-    {   
+    public function registerAgente(Request $request,$renderParameter,$urlParameter){   
         $allowed = array('png', 'jpg', 'gif','jpeg');
         $path = $this->container->getParameter('aplicacion.directorio.imagenes.usuarios');
         $em = $this->getDoctrine()->getManager();
@@ -721,7 +742,7 @@ class SupervisorController extends RegistrationController
                 $foto=  $this->crearNombre(10,$extension);
                 if(!in_array(strtolower($extension), $allowed)){
                        $this->get('session')->getFlashBag()->add('error', 'El fichero que usted adjunta no es permitido!');
-                       return $this->redirect($this->generateUrl('supervisor_new_agente'));
+                       return $this->redirect($this->generateUrl($urlParameter));
                 }
 
                 if(move_uploaded_file($_FILES['aplicacion_emisionesbundle_agente']['tmp_name']['foto'], $path.$foto)){
@@ -733,14 +754,14 @@ class SupervisorController extends RegistrationController
             $em->persist($entity);
             $em->flush();
             $this->get('session')->getFlashBag()->add('success', 'El agente ha sido registrado satisfactoriamente, se ha enviado un link de activacion a su email!');
-            return $this->redirect($this->generateUrl('supervisor_new_agente'));
+            return $this->redirect($this->generateUrl($urlParameter));
         }
         else
         {
             $this->get('session')->getFlashBag()->add('error', 'Ha ocurrido un error al enviar los datos del agente, por favor revise cuidadosamente los valores proporcionados en cada unos de los campos requeridos!');
             
         }
-        return $this->render('EmisionesBundle:SupervisorAdministrarAgentes/AdministrarAgentes:new.html.twig', array(
+        return $this->render($renderParameter, array(
                 'form' => $form->createView(),
             ));
         
@@ -844,21 +865,27 @@ class SupervisorController extends RegistrationController
             'form' => $form->createView(),
         ));
     }
-    public function editClaveAction($id)
-    {
+    public function editClaveAction($id){
+        return $this->editClave($id,
+                'EmisionesBundle:SupervisorAdministrarAgentes/AdministrarAgentes:changePassword.html.twig',
+                'supervisor_index_agentes');
+        
+    }
+    
+    public function editClave($id,$renderParameter,$urlParameter){
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('EmisionesBundle:Agente')->find($id);
 
         if (!$entity) {
             $this->get('session')->getFlashBag()->add('error', 'El agente seleccionado para modificar su clave no existe!');
-                       return $this->redirect($this->generateUrl('supervisor_index_agentes'));
+                       return $this->redirect($this->generateUrl($urlParameter));
         }
 
         $editForm = $this->createEditClaveForm($entity);
         //$deleteForm = $this->createDeleteForm($id);
 
-        return $this->render('EmisionesBundle:SupervisorAdministrarAgentes/AdministrarAgentes:changePassword.html.twig', array(
+        return $this->render($renderParameter, array(
             'entity'      => $entity,
             'edit_form'   => $editForm->createView(),
             //'delete_form' => $deleteForm->createView(),
@@ -1142,15 +1169,29 @@ class SupervisorController extends RegistrationController
            // 'delete_form' => $deleteForm->createView(),
         ));
     }
-    public function updateClaveAction(Request $request, $id)
-    {
+    
+    
+    public function updateClaveAction(Request $request, $id){
+        return $this->updateClave($request,
+                $id,
+                'EmisionesBundle:SupervisorAdministrarAgentes/AdministrarAgentes:changePassword.html.twig',
+                'supervisor_index_agentes',
+                'supervisor_agente_edit_clave');
+    }
+    public function updateClaveAdmAction(Request $request, $id){
+        return $this->updateClave($request,
+                $id,
+                'EmisionesBundle:Supervisor/agentes:changePassword.html.twig',
+                'supervisor_adm_index_agente',
+                'supervisor_adm_edit_clave_agente');
+    }
+    public function updateClave(Request $request, $id,$renderParameter,$urlParameterIndex,$urlParameterEditClave){
         
-       
         $em = $this->getDoctrine()->getManager();
         $entity = $em->getRepository('EmisionesBundle:Agente')->find($id);
         if (!$entity) {
             $this->get('session')->getFlashBag()->add('error', 'El agente seleccionado para modificar suclave no existe!');
-                       return $this->redirect($this->generateUrl('supervisor_index_agentes'));
+                       return $this->redirect($this->generateUrl($urlParameter));
         }
       
        
@@ -1162,11 +1203,11 @@ class SupervisorController extends RegistrationController
      
             $entity->setPassword( $editForm->getData()->getPlainPassword());
             $em->flush();
-            $this->get('session')->getFlashBag()->add('success', "La clave ha sido cambiada satisfctoriamente!");
-            return $this->redirect($this->generateUrl('supervisor_agente_edit_clave', array('id' => $id)));
+            $this->get('session')->getFlashBag()->add('success', "La clave ha sido cambiada satisfactoriamente!");
+            return $this->redirect($this->generateUrl($urlParameterEditClave, array('id' => $id)));
         }
 
-        return $this->render('EmisionesBundle:SupervisorAdministrarAgentes/AdministrarAgentes:changePassword.html.twig', array(
+        return $this->render($renderParameter, array(
             'entity'      => $entity,
             'edit_form'   => $editForm->createView(),
            // 'delete_form' => $deleteForm->createView(),
@@ -1197,46 +1238,56 @@ class SupervisorController extends RegistrationController
            
         ));
     }
-    public function member_unmemberAction($id,$id_empresa)
-    {
+    public function member_unmemberAction($id,$id_empresa){
+        return $this->member_unmemberAgencia($id, $id_empresa,'supervisor_index_agencias');
+    }
+    
+    public function member_unmemberAdmAction($id,$id_empresa){
+        return $this->member_unmemberAgencia($id, $id_empresa,'supervisor_adm_index_agencias');
+    }
+ 
+    public function member_unmemberAgencia($id,$id_empresa,$urlindexParameter){
         $em= $this->getDoctrine()->getManager();
         $agencia = $em->getRepository('EmisionesBundle:Agencia')->find($id);
         $empresa = $em->getRepository('BaseBundle:Empresa')->find($id_empresa);
-        if(!$agencia)
-        {
+        if(!$agencia){
             $this->get('session')->getFlashBag()->add('error', 'La agencia no existe!');
         }
-        if(!$empresa)
-        {
+        if(!$empresa){
             $this->get('session')->getFlashBag()->add('error', 'La empresa del supervisor no existe!');
         }
-        if($empresa->__isMember($agencia))
-        {
+        if($empresa->__isMember($agencia)){
             $empresa->removeAgencia($agencia);
         }
-        else
-        {
+        else{
             $empresa->addAgencia($agencia);
         }
         $em->flush();
         $this->get('session')->getFlashBag()->add('success', 'Operacion realizada satisfactoriamente!');
-        return $this->redirect($this->generateUrl('supervisor_index_agencias'));
+        return $this->redirect($this->generateUrl($urlindexParameter));
     }
-  
-    public function lock_unlockAction($id)
-    {
+    
+    public function lock_unlockAction($id){
+        return $this->lock_unlockAgente($id,'supervisor_index_agentes');
+    }
+    
+    public function  lock_unlockAgenteAdmAction($id){
+        return $this->lock_unlockAgente($id,'supervisor_adm_index_agente');
+    }
+    public function lock_unlockAgente($id,$urlParameter){
         $em= $this->getDoctrine()->getManager();
         $usuario = $em->getRepository('EmisionesBundle:Agente')->find($id);
         if(!$usuario)
         {
             $this->get('session')->getFlashBag()->add('error', 'El agente no existe!');
-            return $this->redirect($this->generateUrl('supervisor_index_agentes'));
+            return $this->redirect($this->generateUrl($urlParameter));
         }
         $usuario->setLocked(!$usuario->isLocked());
         $em->flush();
         $this->get('session')->getFlashBag()->add('success', 'Operacion realizada satisfactoriamente!');
-        return $this->redirect($this->generateUrl('supervisor_index_agentes'));
+        return $this->redirect($this->generateUrl($urlParameter));
     }
+    
     public function lock_unlockCounterAction($id)
     {
         $em= $this->getDoctrine()->getManager();
@@ -1260,20 +1311,27 @@ class SupervisorController extends RegistrationController
         $this->get('session')->getFlashBag()->add('success', 'Operacion realizada satisfactoriamente!');
         return $this->redirect($this->generateUrl('supervisor_index_counters'));
     }
-    public function unable_enableAction($id)
-    {
+    public function unable_enableAction($id){
+        return $this->unable_enableAgente($id, 'supervisor_index_agentes');
+    }
+    
+    public function unable_enableAgenteAdmAction($id){
+         return $this->unable_enableAgente($id, 'supervisor_adm_index_agente');
+    } 
+    
+    public function unable_enableAgente($id,$urlParameter){
         $em= $this->getDoctrine()->getManager();
         $usuario = $em->getRepository('EmisionesBundle:Agente')->find($id);
-        if(!$usuario)
-        {
+        if(!$usuario){
             $this->get('session')->getFlashBag()->add('error', 'El agente no existe!');
-            return $this->redirect($this->generateUrl('supervisor_index_agentes'));
+            return $this->redirect($this->generateUrl($urlParameter));
         }
         $usuario->setEnabled(!$usuario->isEnabled());
         $em->flush();
         $this->get('session')->getFlashBag()->add('success', 'Operacion realizada satisfactoriamente!');
-        return $this->redirect($this->generateUrl('supervisor_index_agentes'));
+        return $this->redirect($this->generateUrl($urlParameter));
     }
+    
     public function activar_desactivarConfiguracionAction($id)
     {
         $em= $this->getDoctrine()->getManager();
@@ -1571,8 +1629,16 @@ class SupervisorController extends RegistrationController
         return new Response(json_encode($result));
     }
     
-   public function load_ajax_agenciasAction()
-    {
+    public function load_ajax_agenciasAction(){
+        return $this->load_ajax_agencias('supervisor_member_unmember_agencia','supervisor_agencia_edit');
+            
+    }
+    
+    public function load_ajax_agenciasAdmAction(){
+        return $this->load_ajax_agencias('supervisor_member_unmember_agenciaAdm','supervisor_agenciaAdm_edit');
+    }
+    
+     public function load_ajax_agencias($urlMiembroNoMiembroParameter,$urlEditarParameter){
         
         $peticion = $this->getRequest();
         $searchfilter = $peticion->request->get('search');
@@ -1617,8 +1683,8 @@ class SupervisorController extends RegistrationController
                 {
                    $result['data'][$cont]['member']= '<i class="fa fa-square-o"></i>';
                 }
-               $result['data'][$cont]['memberUnmember']= $this->generateUrl('supervisor_member_unmember_agencia', array('id' => $agencias[$i]->getId(),'id_empresa'=>$empresa->getId()));
-               $result['data'][$cont]['edit']= $this->generateUrl('supervisor_agencia_edit', array('id' => $agencias[$i]->getId()));                              
+               $result['data'][$cont]['memberUnmember']= $this->generateUrl($urlMiembroNoMiembroParameter, array('id' => $agencias[$i]->getId(),'id_empresa'=>$empresa->getId()));
+               $result['data'][$cont]['edit']= $this->generateUrl($urlEditarParameter, array('id' => $agencias[$i]->getId()));                              
                 $cont++;
         }
       
@@ -1626,8 +1692,19 @@ class SupervisorController extends RegistrationController
        return new Response(json_encode($result));
       
     }
-    public function updateAgenciaAction(Request $request, $id)
-    {
+    
+    public function updateAgenciaAction(Request $request, $id){
+       return $this->updateAgencia($request, $id, 
+                'supervisor_index_agencias','supervisor_agencia_edit',
+                'EmisionesBundle:SupervisorAdministrarAgentes/AdministrarAgencias:editAgencia.html.twig');
+    }
+    
+     public function updateAgenciaAdmAction(Request $request, $id){
+       return  $this->updateAgencia($request, $id, 
+                'supervisor_adm_index_agencias','supervisor_agenciaAdm_edit',
+                'supervisor_adm_index_agencias', 'EmisionesBundle:Supervisor/agencias:editAgencia.html.twig');
+    }
+    public function updateAgencia(Request $request, $id,$urlindexParameter,$urlEditParameter,$renderEditAgencia){
         
         $allowed = array('png', 'jpg', 'gif','jpeg');
         $path = $this->container->getParameter('aplicacion.directorio.imagenes.agencias');
@@ -1636,7 +1713,7 @@ class SupervisorController extends RegistrationController
         $entity = $em->getRepository('EmisionesBundle:Agencia')->find($id);
         if (!$entity) {
            $this->get('session')->getFlashBag()->add('error', 'La agencia que usted desea editar no existe!');
-             return $this->redirect($this->generateUrl('supervisor_index_agencias'));
+             return $this->redirect($this->generateUrl($urlindexParameter));
         }
         $avatarold=$entity->getLogo();//respaldando el avatar antiguo
         
@@ -1656,7 +1733,7 @@ class SupervisorController extends RegistrationController
                 $foto=  $this->crearNombre(10,$extension);
                 if(!in_array(strtolower($extension), $allowed)){
                        $this->get('session')->getFlashBag()->add('error', 'El fichero que usted adjunta no es permitido!');
-                       return $this->redirect($this->generateUrl('supervisor_agencia_edit',array('id'=>$entity->getId())));
+                       return $this->redirect($this->generateUrl($urlEditParameter,array('id'=>$entity->getId())));
                 }
                 if($avatarold!='')
                 {   /*Eliminando el avatar viejo*/
@@ -1679,7 +1756,7 @@ class SupervisorController extends RegistrationController
             }
             $em->flush();
             $this->get('session')->getFlashBag()->add('success', 'La agencia ha sido editada satisfactoriamente!');
-            return $this->redirect($this->generateUrl('supervisor_agencia_edit', array('id'=>$entity->getId())));
+            return $this->redirect($this->generateUrl($urlEditParameter, array('id'=>$entity->getId())));
         }
         else
         {
@@ -1687,11 +1764,12 @@ class SupervisorController extends RegistrationController
            $this->get('session')->getFlashBag()->add('error', 'Ha ocurrido un error al enviar los datos de la agencia, por favor revise cuidadosamente los valores proporcionados en cada unos de los campos requeridos!'); 
         }
         
-        return $this->render('EmisionesBundle:SupervisorAdministrarAgentes/AdministrarAgencias:editAgencia.html.twig', array(
+        return $this->render($renderEditAgencia, array(
             'entity'      => $entity,
             'edit_form'   => $editForm->createView()            
         ));
     }
+    
      public function loadOrdenesAction()
     {
         $peticion = $this->getRequest();
@@ -2390,7 +2468,7 @@ class SupervisorController extends RegistrationController
         ));
     }
     public function newAgenciaAdmAction(){
-        $this->newAgencia('EmisionesBundle:Supervisor/agencias:newAgencia.html.twig');
+        return $this->newAgencia('EmisionesBundle:Supervisor/agencias:newAgencia.html.twig');
     }
     
     public function indexAgenteAdmAction(){
@@ -2459,8 +2537,7 @@ class SupervisorController extends RegistrationController
                 $agentes[]=$agents[$k];
             } 
         }
-        if($searchfilter!='')
-        {
+        if($searchfilter!=''){
          $agentes=  $this->applyFilterSearchAgentes($agentes, $searchfilter);
         }
         
@@ -2472,31 +2549,24 @@ class SupervisorController extends RegistrationController
         $agentes= $this->reduce($pstart, $pend, $agentes);      
         $cont=0;
         $result['data'] = array();
-        for ($i = 0; $i < count($agentes); $i++) 
-        {     
+        for ($i = 0; $i < count($agentes); $i++){     
                 $result['data'][$cont]['agencia']= $agentes[$i]->getAgencia()->__toString();
                 $result['data'][$cont]['nombre']= $agentes[$i]->__toString();
                 $result['data'][$cont]['usuario']= $agentes[$i]->getUserName();
                 $result['data'][$cont]['email']= $agentes[$i]->getEmail();
-                if($agentes[$i]->getSexo()=='M')
-                {
+                if($agentes[$i]->getSexo()=='M'){
                     $result['data'][$cont]['sexo']='fa fa-male';
                 }
-                if($agentes[$i]->getSexo()=='F')
-                {
+                if($agentes[$i]->getSexo()=='F'){
                     $result['data'][$cont]['sexo']='fa fa-female';
                 }            
-                if($agentes[$i]->isLocked())
-                {
+                if($agentes[$i]->isLocked()){
                     $result['data'][$cont]['bloqueado']='fa fa-lock';
-                }
-                else
-                {
+                }else{
                     $result['data'][$cont]['bloqueado']='fa fa-unlock';
                 }
                 // verificar si esta habilitado o no el usuario
-                if($agentes[$i]->isEnabled())
-                {
+                if($agentes[$i]->isEnabled()){
                     $result['data'][$cont]['habilitado']='fa fa-thumbs-o-up';
                 }
                 else
@@ -2548,4 +2618,14 @@ class SupervisorController extends RegistrationController
     public function  updateAgenteAdmAction(Request $request, $id){
         return $this->updateAgente($request, $id,'EmisionesBundle:Supervisor/agentes:edit.html.twig','supervisor_adm_edit_agente');
     } 
+    
+    public function registerAdmAction(Request $request){   
+        return $this->registerAgente($request,
+                'EmisionesBundle:Supervisor/agentes:new.html.twig',
+                'supervisor_adm_new_agente');   
+    }
+    
+    public function editClaveAgenteAdmAction($id){   
+        return $this->editClave($id, 'EmisionesBundle:Supervisor/agentes:changePassword.html.twig', 'supervisor_adm_index_agente');
+    }
 }
