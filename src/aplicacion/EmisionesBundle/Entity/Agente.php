@@ -27,6 +27,12 @@ class Agente extends AplicationUser
      */
     protected $id;
     
+     /**
+     * @var integer
+     *
+     * @ORM\Column(name="agencia", type="integer")
+     */
+    protected $idAgencia;
  
     /**
      * @Gedmo\Versioned()
@@ -398,4 +404,22 @@ class Agente extends AplicationUser
     {
         return $this->ordenes;
     }
+    
+    /**
+     * 
+     * @return type
+     */
+    function getIdAgencia() {
+        return $this->idAgencia;
+    }
+
+    /**
+     * 
+     * @param type $idAgencia
+     */
+    function setIdAgencia($idAgencia) {
+        $this->idAgencia = $idAgencia;
+    }
+
+
 }

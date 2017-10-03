@@ -34,8 +34,8 @@ security:
         - { path: ^/register/agente/create, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }         
         - { path: ^/supervisor, role: ROLE_SUPERVISOR }
-        - { path: ^/counter, role: [ROLE_COUNTER,ROLE_SUPERVISOR] }
-        - { path: ^/queue/manager, role: [ROLE_COUNTER,ROLE_SUPERVISOR,ROLE_CAJA,ROLE_SUPERVISOR_COBRANZA] }
+        - { path: ^/counter, role: [ROLE_COUNTER,ROLE_SUPERVISOR,ROLE_AGENTE_AGENCIA] }
+        - { path: ^/queue/manager, role: [ROLE_COUNTER,ROLE_SUPERVISOR,ROLE_CAJA,ROLE_SUPERVISOR_COBRANZA,ROLE_AGENTE_AGENCIA] }
         - { path: ^/admin/, role: ROLE_ADMIN }
         - { path: ^/, role: ROLE_USER }
         

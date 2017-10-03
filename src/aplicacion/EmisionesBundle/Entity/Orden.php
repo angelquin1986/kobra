@@ -18,7 +18,7 @@ use APY\DataGridBundle\Grid\Mapping as GRID;
  * @ORM\DiscriminatorColumn(name="tipo", type="string")
  * @ORM\DiscriminatorMap({"emision" = "Emision", "revision" = "Revision","anulacion" = "Anulacion"})
  * @ORM\Entity(repositoryClass="aplicacion\EmisionesBundle\Entity\OrdenRepository") 
- * @GRID\Source(columns="id,numeroOrden,prioridad,recordGds,usuario.username,agente.nombre,agente.agencia.nombre,estado.nombre,fecha,aprobadoCaja,detalleAprobacion,slaIncumplido,horaAsignacion,procesedAt,tiempoRealProcesamiento,tipoPago,ciudadDestino.nombre")
+ * @GRID\Source(columns="id,numeroOrden,prioridad,recordGds,usuario.username,agente.nombre,agente.agencia.nombre,estado.nombre,agente.agencia.id,fecha,aprobadoCaja,detalleAprobacion,slaIncumplido,horaAsignacion,procesedAt,tiempoRealProcesamiento,tipoPago,ciudadDestino.nombre")
  */
 class Orden
 {
@@ -82,7 +82,7 @@ class Orden
     
     /**
      * @ORM\Column(name="prioridad", type="integer")
-     * @GRID\Column(title="Prioridad",sortable=false,size="3", type="text",align="center", filterable=false,role={"ROLE_SUPERVISOR","ROLE_COUNTER"})
+     * @GRID\Column(title="Prioridad",sortable=false,size="3", type="text",align="center", filterable=false,role={"ROLE_SUPERVISOR","ROLE_COUNTER","ROLE_AGENTE_AGENCIA"})
      */
     protected $prioridad;
     
@@ -120,8 +120,9 @@ class Orden
      * @var agente
      * @ORM\ManyToOne(targetEntity="Agente", inversedBy="ordenes")
      * @ORM\JoinColumn(name="agente", referencedColumnName="id")
-     * @GRID\Column(field="agente.nombre",sortable=false,operatorsVisible=false,title="Agente", size="10", type="text",align="center",role={"ROLE_COUNTER","ROLE_SUPERVISOR","ROLE_SUPERVISOR_COBRANZA","ROLE_CAJA"})
+     * @GRID\Column(field="agente.nombre",sortable=false,operatorsVisible=false,title="Agente", size="10", type="text",align="center",role={"ROLE_COUNTER","ROLE_SUPERVISOR","ROLE_SUPERVISOR_COBRANZA","ROLE_CAJA","ROLE_AGENTE_AGENCIA"})
      * @GRID\Column(field="agente.agencia.nombre",sortable=false,operatorsVisible=false,title="Agencia", size="20", type="text",align="center")
+     * @GRID\Column(field="agente.agencia.id",sortable=false,filter="select", selectFrom="source",defaultOperator="eq",operatorsVisible=true,operators={"eq","isNull","isNotNull"},title="AgenciaId", size="10", type="text",align="center",role={"ROLE_COUNTER","ROLE_SUPERVISOR","ROLE_SUPERVISOR_COBRANZA","ROLE_CAJA","ROLE_AGENTE_AGENCIA"})
      */   
     private $agente;
     
@@ -141,7 +142,7 @@ class Orden
      * @var estado
      * @ORM\ManyToOne(targetEntity="Estadoorden", inversedBy="ordenes")
      * @ORM\JoinColumn(name="estado", referencedColumnName="id")
-     * @GRID\Column(field="estado.nombre",sortable=false,filter="select", selectFrom="values", values={""="Todos","Pendiente"="Pendiente","Procesada"="Procesada","Rechazada"="Rechazada"},title="Estado",operatorsVisible=false, size="7", type="text" ,align="center",role={"ROLE_SUPERVISOR","ROLE_COUNTER"})
+     * @GRID\Column(field="estado.nombre",sortable=false,filter="select", selectFrom="values", values={""="Todos","Pendiente"="Pendiente","Procesada"="Procesada","Rechazada"="Rechazada"},title="Estado",operatorsVisible=false, size="7", type="text" ,align="center",role={"ROLE_SUPERVISOR","ROLE_COUNTER","ROLE_AGENTE_AGENCIA"})
      */   
     protected $estado;
     
@@ -157,7 +158,7 @@ class Orden
      * @var string
      * @Gedmo\Versioned()
      * @ORM\Column(name="record_gds", type="text")
-     * @GRID\Column(title="Record",sortable=false,operatorsVisible=false,size="12", type="text",align="center",role={"ROLE_COUNTER","ROLE_SUPERVISOR","ROLE_SUPERVISOR_COBRANZA","ROLE_CAJA"})
+     * @GRID\Column(title="Record",sortable=false,operatorsVisible=false,size="12", type="text",align="center",role={"ROLE_COUNTER","ROLE_SUPERVISOR","ROLE_SUPERVISOR_COBRANZA","ROLE_CAJA","ROLE_AGENTE_AGENCIA"})
      */
     protected $recordGds;
 

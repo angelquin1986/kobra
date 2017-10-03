@@ -144,6 +144,8 @@
         {% include 'EmisionesBundle:Menu:caja.html.twig' %}
     {%elseif 'ROLE_SUPERVISOR_COBRANZA' in app.user.roles%} 
         {% include 'EmisionesBundle:Menu:supervisorcobranza.html.twig' %}
+    {%elseif 'ROLE_AGENTE_AGENCIA' in app.user.roles%} 
+        {% include 'EmisionesBundle:Menu:agente.html.twig' %}
     {%endif%}
        
  {% endblock %}

@@ -2,21 +2,17 @@
 
 namespace aplicacion\EmisionesBundle\Controller;
 
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use APY\DataGridBundle\Grid\Source\Entity;
-use APY\DataGridBundle\Grid\Column\TextColumn;
-use APY\DataGridBundle\Grid\Column\BlankColumn;
-use APY\DataGridBundle\Grid\Column\NumberColumn;
-use APY\DataGridBundle\Grid\Column\ActionsColumn;
-use APY\DataGridBundle\Grid\Action\RowAction;
-use APY\DataGridBundle\Grid\Export\CSVExport;
+use aplicacion\EmisionesBundle\Entity\Agente;
 use aplicacion\EmisionesBundle\Entity\Anulacion;
-use aplicacion\EmisionesBundle\Entity\Revision;
 use aplicacion\EmisionesBundle\Entity\Emision;
+use aplicacion\EmisionesBundle\Entity\Revision;
 use aplicacion\EmisionesBundle\Entity\Tarjetacredito;
-use aplicacion\EmisionesBundle\Entity\DepefectivoTransferenciabancaria;
-use aplicacion\EmisionesBundle\Entity\Pagodirecto;
+use APY\DataGridBundle\Grid\Action\RowAction;
+use APY\DataGridBundle\Grid\Column\BlankColumn;
+use APY\DataGridBundle\Grid\Column\TextColumn;
+use APY\DataGridBundle\Grid\Export\CSVExport;
+use APY\DataGridBundle\Grid\Source\Entity;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 /**
  * Aerolinea controller.
  *
@@ -26,11 +22,16 @@ class GlobalController extends Controller
 
     public function GridAction()
     {
-	$em=  $this->getDoctrine()->getManager();
+	//$this->container->get('logger')->error('Local variables',  $this->getUser()->getAgente());
+        //$this->container->get('logger')->error('empresa:', array('empresa' => $$this->getUser()->getEmpresa()));
+        $em=  $this->getDoctrine()->getManager();
 
-
-        $configuracionActiva=  $em->getRepository('BaseBundle:Configuracion')->findOneBy(array('empresa'=>  
-	$this->getUser()->getEmpresa(),'activa'=>true));
+        $idAgencia =$this->consultarAgenciasPorIdAgente($this->getUser()->getId());
+        //solla para pruebas
+        //$idAgencia= $this->consultarAgenciasPorIdAgente(542);
+        //$configuracionActiva=  $em->getRepository('BaseBundle:Configuracion')->findOneBy(array('empresa'=>  
+	//$this->getUser()->getEmpresa(),'activa'=>true));
+         $configuracionActiva=  $em->getRepository('BaseBundle:Configuracion')->findOneBy(array('activa'=>true));
         // Creates a simple grid based on your entity (ORM)
         $source = new Entity('EmisionesBundle:Orden');
         // Get a Grid instance
@@ -40,6 +41,9 @@ class GlobalController extends Controller
         $grid->hideColumns('procesedAt');
         $grid->hideColumns('horaAsignacion');
         $grid->hideColumns('tiempoRealProcesamiento');
+        $grid->hideColumns('tiempoRealProcesamiento');
+        $grid->hideColumns('agente.agencia.id');
+        
          /*Esconder de la cola global estas columnas que son para el dashboard*/
         $source->manipulateRow(
             function ($row) 
@@ -53,10 +57,14 @@ class GlobalController extends Controller
         $source->manipulateQuery(
             function ($query) use ($tableAlias)
             {
-                if($this->getUser()->hasRole('ROLE_CAJA'))
-                {
+                if($this->getUser()->hasRole('ROLE_CAJA')){
                     $query->andWhere($tableAlias .'.modificadoSupervisorCobros = false');
                 }
+                 //if($this->getUser()->hasRole('ROLE_AGENTE_AGENCIA') ){
+                 //$query->andWhere($tableAlias .'.modificadoSupervisorCobros = false');
+                  //  $grid->setPermanentFilters(array(
+                   // 'agente.agencia' => $idAgencia));
+               // }
                 $query->orderBy($tableAlias .'.prioridad', 'DESC');                
             }
         );
@@ -64,7 +72,7 @@ class GlobalController extends Controller
         $grid->setSource($source);
         // Set the selector of the number of items per page
         $grid->setDefaultFilters(array(
-            'estado.nombre'=>'Pendiente',             
+            'estado.nombre'=>'Pendiente',         
             'fecha' => array('operator' => 'btwe','from' => date('d-m-Y 00:00'), 'to' => date('d-m-Y 23:59')) // Range filter with the operator 'tbw'   
             ));
         $procesarSupervisor = new RowAction('<i style="margin-left:3px;" class="fa fa-gear"></i>', 'counter_emision_edit');
@@ -124,7 +132,7 @@ class GlobalController extends Controller
         $rowConciliarAction=new RowAction('<i style="margin-left:7px;" class="fa fa-book"></i>','operador_conciliar_manual');
         $rowConciliarAction->setRole(array("ROLE_CAJA","ROLE_SUPERVISOR_COBRANZA"));
         $rowShow=new RowAction('<i style="margin-left:3px;" class="text-aqua fa fa-eye"></i>','counter_emision_show');
-        $rowShow->setRole(array('ROLE_SUPERVISOR'));
+        $rowShow->setRole(array('ROLE_SUPERVISOR','ROLE_AGENTE_AGENCIA'));
         $rowShow->manipulateRender(
             function ($action, $row)
             { if ($row->getEntity() instanceof Anulacion) {
@@ -175,21 +183,42 @@ class GlobalController extends Controller
         );
         $detalleColumn=$grid->getColumn('detalleAprobacion')->setExport(true);                
         $AlertColumn->setExport(false);
-        $AlertColumn->setRole(array('ROLE_SUPERVISOR','ROLE_COUNTER'));
+        $AlertColumn->setRole(array('ROLE_SUPERVISOR','ROLE_COUNTER','ROLE_AGENTE_AGENCIA'));
         $csvExport=new CSVExport('CSV Export');
-        $csvExport->setRole(array('ROLE_SUPERVISOR','ROLE_SUPERVISOR_COBRANZA'));
+        $csvExport->setRole(array('ROLE_SUPERVISOR','ROLE_SUPERVISOR_COBRANZA','ROLE_AGENTE_AGENCIA'));
         //Permanent filters for counters
-        if($this->getUser()->hasRole('ROLE_COUNTER'))
-        {
+        //filtro obligado para las personas que tengan  role  ROLE_COUNTER
+        if($this->getUser()->hasRole('ROLE_COUNTER') && !$this->getUser()->hasRole('ROLE_AGENTE_AGENCIA') ){
             $grid->setPermanentFilters(array(
             'usuario.username' => $this->getUser()->getUsername()));
         }
-       if($this->getUser()->hasRole('ROLE_CAJA') || $this->getUser()->hasRole('ROLE_SUPERVISOR_COBRANZA'))
-        {
+       if($this->getUser()->hasRole('ROLE_CAJA') || $this->getUser()->hasRole('ROLE_SUPERVISOR_COBRANZA') && !$this->getUser()->hasRole('ROLE_AGENTE_AGENCIA')){
             $grid->setPermanentFilters(array(
             'estado.nombre' => 'Procesada'));
         }
+        
+        /**
+         * filtro solo cuando tiene el perdil de agente de agencia
+         */
+        $this->container->get('logger')->error('perfilAgenteAgencia:', array('agencia' => $this->getUser()->getRoles()));
+        if($this->getUser()->hasRole('ROLE_AGENTE_AGENCIA')){
+            if(!$idAgencia){
+               $idAgencia = 'no mostrar nada';
+            }
+            $grid->setPermanentFilters(array(
+            'agente.agencia.id' => (string)$idAgencia));
+        }
+        
+        
         $grid->addColumn($AlertColumn,4);
+        //cuando  existe el perfil agente agencia  no tiene acciones
+        if(!$this->getUser()->hasRole('ROLE_AGENTE_AGENCIA')){
+         //   $grid->addRowAction($rowShow);
+        //    $grid->addRowAction($rowAsignarAction);
+        //    $grid->addRowAction($rowConciliarAction);
+        //    $grid->addRowAction($procesar);
+        //    $grid->addRowAction($procesarSupervisor); 
+        }
         $grid->addRowAction($rowShow);
         $grid->addRowAction($rowAsignarAction);
         $grid->addRowAction($rowConciliarAction);
@@ -197,6 +226,29 @@ class GlobalController extends Controller
         $grid->addRowAction($procesarSupervisor);
         $grid->addExport($csvExport);
         return $grid->getGridResponse('EmisionesBundle:QueueManager:grid.html.twig',array('configuracionactiva'=>$configuracionActiva));
+    }
+    
+    /**
+     * Metodo para buscar en base la agencia por el id agente retorna una collecion de agencias
+     */
+    public function consultarAgenciasPorIdAgente($idUsuarioAgente){
+        
+        $em =  $this->getDoctrine()->getManager();
+        $agente=$em->getRepository('EmisionesBundle:Agente')->findOneBy(array('id'=> $idUsuarioAgente));
+        /**$idAgencia = array();
+        if($agentes){
+            foreach ($agentes as $agente) {
+                array_push($idAgencia,$agente->getIdAgencia());
+            }
+        }*/
+       if($agente instanceof Agente){
+           $this->container->get('logger')->info('agencias:', array('agencia' => $agente->getIdAgencia()));
+           return   $agente->getIdAgencia(); 
+       }else{
+            $this->container->get('logger')->info('El usuario no es un agente');
+           return null;
+       }
+      
     }
     public function getValorMonetarioOrden($idOrden)
     {
