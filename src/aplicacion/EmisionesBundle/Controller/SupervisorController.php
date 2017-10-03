@@ -37,7 +37,7 @@ use APY\DataGridBundle\Grid\Column\ActionsColumn;
 use APY\DataGridBundle\Grid\Action\RowAction;
 use APY\DataGridBundle\Grid\Export\CSVExport;
 use aplicacion\EmisionesBundle\Entity\Tarjetacredito;
-
+use aplicacion\EmisionesBundle\Entity\Agenteagenciahistorial;
 
 /**
  * Usuariointerno controller.
@@ -924,12 +924,13 @@ class SupervisorController extends RegistrationController
         return $this->updateAgente($request, $id, 'EmisionesBundle:SupervisorAdministrarAgentes/AdministrarAgentes:edit.html.twig','supervisor_agente_edit');
     }
     
-    public function updateAgente(Request $request, $id,$renderParameter,$urldParameter)
-    {
-        
+    public function updateAgente(Request $request, $id,$renderParameter,$urldParameter){
+      $em = $this->getDoctrine()->getManager();
+      $em->getConnection()->beginTransaction();
+      try {
         $allowed = array('png', 'jpg', 'gif','jpeg');
         $path = $this->container->getParameter('aplicacion.directorio.imagenes.usuarios');
-        $em = $this->getDoctrine()->getManager();
+       
 
         $entity = $em->getRepository('EmisionesBundle:Agente')->find($id);
 
@@ -977,6 +978,9 @@ class SupervisorController extends RegistrationController
                 $entity->setFoto($avatarold);
             }
             $em->flush();
+            $this->persistirAgenteAgenciaHistorial($em,$entity,$editForm);
+            //cerrar la transaccion 
+            $em->getConnection()->commit();
             $this->get('session')->getFlashBag()->add('success', "Su perfil ha sido actualizado!");
             return $this->redirect($this->generateUrl($urldParameter, array('id' => $id)));
         }
@@ -984,12 +988,30 @@ class SupervisorController extends RegistrationController
         {
            $this->get('session')->getFlashBag()->add('error', "Ha ocurrido un error, por favor revise detalladamente los valores proporcionados!"); 
         }
-
+        
         return $this->render($renderParameter, array(
             'entity'      => $entity,
             'edit_form'   => $editForm->createView(),
            // 'delete_form' => $deleteForm->createView(),
         ));
+       }catch (Exception $e) {
+        $em->getConnection()->rollback();
+            throw $e;
+      }  
+        
+    }
+    
+     public function persistirAgenteAgenciaHistorial($emParameter,$agente,$editForm){
+       $idAgenciaNueva =$editForm->all()['agencia']->getViewData();
+       //solo crear historial cuando se modifique el registro de agencia
+       if($idAgenciaNueva != $agente->getIdAgencia()){
+            $agenteAgenciaHistorial = new Agenteagenciahistorial();
+            $agenteAgenciaHistorial->setAgencia($agente->getIdAgencia());
+            $agenteAgenciaHistorial->setAgente($agente->getId());
+            $agenteAgenciaHistorial->setFechaModificacion(new \DateTime());
+            $emParameter->persist($agenteAgenciaHistorial);
+            $emParameter->flush();
+       }      
     }
     public function updateEmpresaAction(Request $request, $id)
     {

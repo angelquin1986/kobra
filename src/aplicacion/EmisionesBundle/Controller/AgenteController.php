@@ -11,6 +11,7 @@ use FOS\UserBundle\Event\FormEvent;
 use FOS\UserBundle\FOSUserEvents;
 use FOS\UserBundle\Event\GetResponseUserEvent;
 use FOS\UserBundle\Event\FilterUserResponseEvent;
+use aplicacion\EmisionesBundle\Entity\Agenteagenciahistorial;
 
 /**
  * Agente controller.
@@ -250,11 +251,14 @@ class AgenteController extends RegistrationController
      * Edits an existing Agente entity.
      *
      */
-    public function updateAction(Request $request, $id)
-    {
+    public function updateAction(Request $request, $id){
+      $em = $this->getDoctrine()->getManager();
+      $em->getConnection()->beginTransaction();
+      try {
+        
         $allowed = array('png', 'jpg', 'gif','jpeg');
         $path = $this->container->getParameter('aplicacion.directorio.imagenes.usuarios');
-        $em = $this->getDoctrine()->getManager();
+       
 
         $entity = $em->getRepository('EmisionesBundle:Agente')->find($id);
 
@@ -298,6 +302,9 @@ class AgenteController extends RegistrationController
                 $entity->setFoto($avatarold);
             }
             $em->flush();
+            $this->persistirAgenteAgenciaHistorial($em,$entity,$editForm);
+            //cerrar la transaccion 
+            $em->getConnection()->commit();
             $this->get('session')->getFlashBag()->add('success', "Su perfil ha sido actualizado!");
             return $this->redirect($this->generateUrl('agente_edit', array('id' => $id)));
         }
@@ -306,12 +313,30 @@ class AgenteController extends RegistrationController
             $entity->setFoto($avatarold);
            $this->get('session')->getFlashBag()->add('error', "Ha ocurrido un error, por favor revisar detalladamente los valores porporcionados!"); 
         }
-
+        
         return $this->render('EmisionesBundle:Agente:edit.html.twig', array(
             'entity'      => $entity,
             'edit_form'   => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
         ));
+      }catch (Exception $e) {
+        $em->getConnection()->rollback();
+            throw $e;
+      } 
+        
+    }
+
+     public function persistirAgenteAgenciaHistorial($emParameter,$agente,$editForm){
+       $idAgenciaNueva =$editForm->all()['agencia']->getViewData();
+       //solo crear historial cuando se modifique el registro de agencia
+       if($idAgenciaNueva != $agente->getIdAgencia()){
+            $agenteAgenciaHistorial = new Agenteagenciahistorial();
+            $agenteAgenciaHistorial->setAgencia($agente->getIdAgencia());
+            $agenteAgenciaHistorial->setAgente($agente->getId());
+            $agenteAgenciaHistorial->setFechaModificacion(new \DateTime());
+            $emParameter->persist($agenteAgenciaHistorial);
+            $emParameter->flush();
+       }      
     }
     /**
      * Deletes a Agente entity.
