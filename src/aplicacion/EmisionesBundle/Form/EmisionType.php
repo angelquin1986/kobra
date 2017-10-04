@@ -40,6 +40,8 @@ class EmisionType extends AbstractType
              ))
             ->add('recordGds','text',array('attr'=>array('class' => 'form-control input-sm ','readOnly'=>true)))
             ->add('recordNew','text',array('required'=>true,'attr'=>array('class' => 'form-control input-sm' )))
+            ->add('numerosDeBoleto','text',array('required'=>true,'attr'=>array('class' => 'form-control input-sm' )))
+            ->add('numerodeboletos','text',array('required'=>true,'attr'=>array('class' => 'form-control input-sm','readOnly'=>true )))
             ->add('tourcode','text',array('required'=>false,'attr'=>array('class' => 'form-control input-sm','readOnly'=>true)))
             ->add('feeServicios','text',array('attr'=>array('class' => 'form-control input-sm')))
             ->add('fecha','datetime',array('widget'=>'single_text', 'format' => 'dd-MM-yyyy  --  H:m:s','attr'=>array('class' => 'form-control input-sm')))

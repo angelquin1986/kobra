@@ -139,7 +139,7 @@
                                         {{form_errors(edit_form.recordGds)}}
                                     </div><!-- /.form group -->
 
-									<div class="form-group">
+                                    <div class="form-group">
                                          <label>Nuevo Record GDS:</label>
                                         <div class="input-group">
                                             <div class="input-group-addon">
@@ -149,6 +149,27 @@
                                         </div><!-- /.input group -->
                                         {{form_errors(edit_form.recordNew)}}
                                     </div><!-- /.form group -->
+                                    
+                                    <div class="form-group">
+                                         <label>N&uacute;meros de Boleto:</label>
+                                        <div class="input-group">
+                                            <div class="input-group-addon">
+                                                <i class="fa fa-tags"></i>
+                                            </div>
+                                            {{ form_widget(edit_form.numerodeboletos)}}                                                
+                                        </div>
+                                        {{form_errors(edit_form.numerodeboletos)}}
+                                    </div>
+                                    <div class="form-group">
+                                         <label>Ingresar N&uacute;meros de Boleto[, ; :]:</label>
+                                        <div class="input-group">
+                                            <div class="input-group-addon">
+                                                <i class="fa fa-tags"></i>
+                                            </div>
+                                            {{ form_widget(edit_form.numerosDeBoleto)}}                                                
+                                        </div>
+                                        {{form_errors(edit_form.numerosDeBoleto)}}
+                                    </div>
                                     
                                      <div class="form-group">
                                          <label>Tour Code:</label>

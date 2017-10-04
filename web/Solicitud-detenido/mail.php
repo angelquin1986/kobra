@@ -209,6 +209,7 @@ if ($tamanio1 > 4194304 && $varname1 !== "") {
         $orden = contador();
         // Parte del almacenamiento en la BD
         require './DBAplicacion.php';
+        //aqui se almacena los datos en la orden de la base de datos
         $respuestaOperacion = curlAlmacenarSolicitudOrden($_POST,$_FILES,$orden);
         $savedFile = $respuestaOperacion['savedFile'];
         $mensajeSistema = $respuestaOperacion['mensajeServicio'];

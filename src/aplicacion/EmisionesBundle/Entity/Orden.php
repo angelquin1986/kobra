@@ -272,7 +272,20 @@ class Orden
     protected $tipoPago;
     
     
-
+    /**
+     * @var string
+     * @Gedmo\Versioned()
+     * @ORM\Column(name="numerodeboletos", type="integer")
+     */
+    protected $numerodeboletos;
+    
+    /**
+     * @var string
+     * @Gedmo\Versioned()
+     * @ORM\Column(name="numerosdeboleto", type="string")
+     */
+    protected $numerosDeBoleto;
+    
     public function __construct() {
         $this->formasPagos = new ArrayCollection();
         $this->modificadoSupervisorCobros=false;
@@ -1278,4 +1291,21 @@ class Orden
     {
         return $this->recordNew;
     }
+    
+    function getNumerodeboletos() {
+        return $this->numerodeboletos;
+    }
+
+    function setNumerodeboletos($numerodeboletos) {
+        $this->numerodeboletos = $numerodeboletos;
+    }
+    function getNumerosDeBoleto() {
+        return $this->numerosDeBoleto;
+    }
+
+    function setNumerosDeBoleto($numerosDeBoleto) {
+        $this->numerosDeBoleto = $numerosDeBoleto;
+    }
+
+
 }

@@ -165,7 +165,7 @@ if(detectIE() ){
 	<a style="font-size:24px;" href="https://kobramymtravel.com/resetting/request" target="_blank"> Obtener Contraseña </a>
 </div>
   <table style="border: black 3px solid;" id="formu" name="formu" >
-  <tr>
+  <tr id="trLogo">
     <td width="160"  align="center"><img src="img/Logo MYM.jpg" width="110" height="110"  /></td>
     <td width="640" colspan="3" class="headerbg"><div id="tituloA"></div></td>
   </tr>
@@ -330,13 +330,26 @@ if(detectIE() ){
      </div>
     </td>
   </tr>
-  <tr>
+  <tr id="trRecordGds">
     <td class=bgblue>Record del GDS :</td>
-    <td colspan="3">
-	  <input name="inputRecord" type="text" id="inputRecord" style="text-transform: uppercase;"  size="40" maxlength="50" />	
+    
+    <td colspan="1">
+	  <input name="inputRecord" type="text" id="inputRecord" style="text-transform: uppercase;"  size="30" maxlength="50" />	
      <img src='img/requerido.png' alt='Campo obligatorio' width='8' height='8' vspace='4'>
     </td>
-  </tr>  
+    <td class="bgblue trRecordGdsNumeroBoletos" >N&uacute;mero de boletos :</td>
+    <td id="trRecordGdsNumeroBoletos" class="trRecordGdsNumeroBoletos">
+        <input name="inputNumeroBoletos"  class="inputNumero inputNumeroBoletos" type="text" id="inputNumBoletos" style="text-transform: uppercase;"  size="10" maxlength="2" />	
+     <img src='img/requerido.png' alt='Campo obligatorio' width='8' height='8' vspace='4'>
+    </td>
+  </tr>
+  <!--tr>
+      <td class="bgblue" >N&uacute;mero de boletos :</td>
+    <td >
+	  <input name="xxsinputNumeroBoletos" type="text" id="inputRecord2" style="text-transform: uppercase;"  size="40" maxlength="50" />	
+     <img src='img/requerido.png' alt='Campo obligatorio' width='8' height='8' vspace='4'>
+    </td>
+  </tr-->
   <tr>
     <td class=bgblue>Tour code :</td>
     <td colspan="3">

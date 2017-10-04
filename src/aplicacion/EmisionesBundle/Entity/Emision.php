@@ -37,7 +37,6 @@ class Emision extends Orden
     private $tarifaReserva;
 
 
-    
     /**
      * Constructor
      */
@@ -795,4 +794,6 @@ class Emision extends Orden
     {
         return $this->tipoPago;
     }
+
+
 }

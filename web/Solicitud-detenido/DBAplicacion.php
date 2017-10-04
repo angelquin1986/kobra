@@ -676,7 +676,8 @@ function generarArrayEnvioOrden($post, $nombreAdjunto, $numeroOrden, $prioridadC
                 'tarjetasCredito' => $arrayPagoTC,
                 'pagosDirectos' => $arrayPagoDirecto,
                 'detbs' => $arrayDepefectivoTransferenciaBancaria
-            )
+            ),
+            'numeroDeBoletos' =>filtrarPost($post, 'inputNumeroBoletos')
         )
     );
     return $arrayResult;

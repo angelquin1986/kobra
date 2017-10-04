@@ -991,19 +991,24 @@ class CounterController extends RegistrationController
                         $entity->setProcesadaEmergencia(true);
                     }
                 }
-                $em->flush();
-                $this->get('session')->getFlashBag()->add('success', 'Operacion realizada satisfactoriamente!');
+                if($this->validarNumeroBoletos($editForm)){
+                    $em->flush();
+                    $this->get('session')->getFlashBag()->add('success', 'Operacion realizada satisfactoriamente!');
+                }
                 return $this->redirect($this->generateUrl('counter_emision_show', array('id' => $id)));
             }
             else if($estadoviejo== 'Pendiente' && ($editForm->getData()->getEstado()->getNombre()==$estadoviejo))
             {
-                $em->flush();
-                $this->get('session')->getFlashBag()->add('success', 'Operacion realizada satisfactoriamente!');
+                if($this->validarNumeroBoletos($editForm)){
+                    $em->flush();
+                    $this->get('session')->getFlashBag()->add('success', 'Operacion realizada satisfactoriamente!');
+                }
             }
-            else
-            {
-                $em->flush();
-                $this->get('session')->getFlashBag()->add('success', 'Operacion realizada satisfactoriamente!');  
+            else{
+                if($this->validarNumeroBoletos($editForm)){
+                    $em->flush();
+                    $this->get('session')->getFlashBag()->add('success', 'Operacion realizada satisfactoriamente!');  
+                }
             }
         }
         else
@@ -1015,6 +1020,49 @@ class CounterController extends RegistrationController
             'entity'      => $entity,
             'edit_form'   => $editForm->createView()            
         ));
+    }
+    
+    public function validarNumeroBoletos($editFormParameter ){
+        $numeroDeBoletos =$editFormParameter->getData()->getNumerodeboletos();
+        $numerosDeBoleto =$editFormParameter->getData()->getNumerosDeBoleto();
+        $boletosArray= array();
+        $boletosArray = split('[,;:]', $numerosDeBoleto);
+        if($numeroDeBoletos){
+            //validar si el numero de  boletos es igual al ingresado
+          
+            if(count($boletosArray)!=$numeroDeBoletos){
+                $this->get('session')->getFlashBag()->add('error', 'Ha ocurrido un error, El número de boletos ingresados  deben ser : '.$numeroDeBoletos);
+                return false;
+            }else{
+                $numeroBoletoError = array();
+                foreach ($boletosArray as $numeroBoleto){
+                    if(strlen($numeroBoleto)!=13){
+                        array_push($numeroBoletoError,$numeroBoleto);
+                    }
+                }
+                if(count($numeroBoletoError)>0){
+                    $this->get('session')->getFlashBag()->add('error', 'Formato incorrecto,Boleto(s): '.implode(",", $boletosArray));
+                    return false;
+                }
+            }
+        }else{
+            if(count($boletosArray)<1){
+                $this->get('session')->getFlashBag()->add('error', 'Ha ocurrido un error, No a ingresado los boletos');
+                return false;
+            }else{
+               $numeroBoletoError = array();
+                foreach ($boletosArray as $numeroBoleto){
+                    if(strlen($numeroBoleto)!=13){
+                        array_push($numeroBoletoError,$numeroBoleto);
+                    }
+                }
+                if(count($numeroBoletoError)>0){
+                    $this->get('session')->getFlashBag()->add('error', 'Formato incorrecto,Boleto(s): '.implode(",", $boletosArray));
+                    return false;
+                } 
+            }
+        }
+        return true;
     }
     public function updateAnulacionAction(Request $request, $id)
     {

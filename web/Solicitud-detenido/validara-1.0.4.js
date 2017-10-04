@@ -154,9 +154,15 @@ function validaForm(){
 
 		if(!validaLongitud(form.tarjetac.value, 0, 5, 9000000000)) campoError(form.tarjetac);
 	}
+        if(form.selectServicio.selectedIndex === 1){
+            //validar numero de boletos
+            var numeroBoleto = eliminaEspacios($('#inputNumBoletos').val());
+            if(!validaLongitud(numeroBoleto, 0, 1, 99)) campoErrorElement($('#inputNumBoletos'));
+        }
+        
 	if(error == 1){
-		PopupMen(7);
-		return false;
+            PopupMen(7);
+	    return false;
 	}
         if(errorCondiciones == 1){
 		PopupMen(43);

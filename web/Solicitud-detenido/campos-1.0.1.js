@@ -151,29 +151,31 @@ $(document).ready(function(){
 		}		
 		form.selectOperador.className=claseNormal;
     });
-	$('#selectServicio').change(function() {
+    $('#selectServicio').change(function() {
+        //alert(form.selectServicio.selectedIndex);
 		ClearB();
 		form.pasajero.style.visibility = "hidden";
 		form.selectServicio.className=claseNormal;
 		form.selectBoletos.selectedIndex = 0;
 		form.selectOperador.selectedIndex = 0;
-		form.selectFee.disabled = 0
-		;
+		form.selectFee.disabled = 0;
 		
 		if(form.selectServicio.selectedIndex == 3) {
 			form.selectFee.selectedIndex=1;
 		}else{
-				form.selectFee.selectedIndex=0;
+			form.selectFee.selectedIndex=0;
 		}
 		if(form.selectServicio.selectedIndex == 1){
 			filacoculta(false,true,false);
 			ocultarFila(17,true);
+                        $('.trRecordGdsNumeroBoletos').css("display", "")
 		}
 		else if(form.selectServicio.selectedIndex == 2){
 			form.pasajero.style.visibility = "visible";
 			filacoculta(true,true,false);
 			form.selectFee.disabled = 1;
 			ocultarFila(17,false);
+                       
 		}
 		else if(form.selectServicio.selectedIndex == 3){
 			form.pasajero.style.visibility = "visible";
@@ -185,9 +187,9 @@ $(document).ready(function(){
 		}
     });
 	$('#inputRecord').change(function() {
-        $('#inputRecord').val(form.inputRecord.value.toUpperCase());
+            $('#inputRecord').val(form.inputRecord.value.toUpperCase());
 		form.inputRecord.className=claseNormal;
-    });
+        });
 	$('#inputTourcode').change(function() {
         $('#inputTourcode').val(form.inputTourcode.value.toUpperCase());
 		form.inputTourcode.className=claseNormal;
@@ -422,7 +424,7 @@ $(document).ready(function(){
 	$('#inputVal21').keypress(function(e) {
 	    patron =/([0-9])/; 
 	    return TeclasP(e.which, patron); 		
-    });
+        });
 	$('#inputVal22').keypress(function(e) {
 	    patron =/([0-9.])/; 
 	    return TeclasP(e.which, patron); 		
@@ -430,7 +432,7 @@ $(document).ready(function(){
 	$('#inputVal31').keypress(function(e) {
 	    patron =/([a-zA-Z0-9 ])/; 
 	    return TeclasP(e.which, patron); 		
-    });
+        });
 	$('#inputVal32').keypress(function(e) {
 	    patron =/([0-9.])/; 
 	    return TeclasP(e.which, patron); 		
@@ -482,13 +484,17 @@ $(document).ready(function(){
 	$('#inputVal1').blur(function() {
 		form.inputVal1.className=claseNormal;
 		valordec(form.inputVal1);
-    });
+        });
 	$('#inputVal22').blur(function() {
 		valordec(form.inputVal22);
-    });
+        });
 	$('#inputVal32').blur(function() {
 		valordec(form.inputVal32);
-    });
+        });
+        $('.inputNumero').keypress(function(e) {
+	    patron =/([0-9.])/; 
+	    return TeclasP(e.which, patron); 		
+	});
 	$('#tneto').blur(function() {
 		valordec(form.tneto);
 		if(form.tinteres.value == "") form.ttotal.value = form.tneto.value;
@@ -501,7 +507,7 @@ $(document).ready(function(){
 			else form.tneto.className=claseError;
 		}
 		valordec(form.ttotal);
-    });
+        });
 	$('#tinteres').blur(function() {
 		valordec(form.tinteres);
 		if(form.tneto.value == "") form.ttotal.value = form.tneto.value;
@@ -924,6 +930,10 @@ function campoError(campo){
 	error=1;
 }
 
+function campoErrorElement(element){
+    $(element).addClass(claseError);	
+    error=1;
+}
 function FromReset(){
 	for(i=1; i<=70; i++){
 		form.elements[i].value="";
@@ -969,6 +979,9 @@ function FromReset(){
 //	form.inputRuc.focus();
 }
 function filacoculta(rfilas,efilas,afilas){
+    //console.log(document.getElementById('formu').getElementsByTagName('tr')[0].id);
+    //console.log($('.trRecordGdsNumeroBoletos'));
+        $('.trRecordGdsNumeroBoletos').css("display", "none");
 	ocultarFila(15,rfilas);
 	ocultarFila(22,rfilas);
 	

@@ -91,7 +91,7 @@ class CyborgController extends Controller
        
          $result=array();
          $data = $request->request->get('Orden');
-
+         //$this->container->get('logger')->error('numeroDeBoletos',  array('numeroDeBoletos' => $data['numeroDeBoletos']));
          $em=  $this->getDoctrine()->getManager();
          if(isset($data['tipoOrden']['emision']))
          {
@@ -99,6 +99,8 @@ class CyborgController extends Controller
             $orden=new Emision();
             $orden->setReservaPnr($emision['reservaPnr']);
             $orden->setTarifaReserva($emision['tarifaReserva']);
+            //cuando es emision se debe agregar el numero del boletos
+            $orden->setNumerodeboletos($data['numeroDeBoletos']);
          }
          elseif(isset($data['tipoOrden']['revision']))
          {
