@@ -6,6 +6,7 @@
 
 
 function Tiempo($hora, $minu){
+        //tomar las horas del server
 	$ho = strftime("%H");
 	$mi = strftime("%M");
 	$msga = "F";

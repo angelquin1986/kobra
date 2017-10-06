@@ -272,7 +272,7 @@ if ($tamanio1 > 4194304 && $varname1 !== "") {
 
 
 
-        $body = $mensa;
+        /**$body = $mensa;
         $mail->Body = $body;                
         $done = $mail->Send();
         $retry = 1;
@@ -285,7 +285,8 @@ if ($tamanio1 > 4194304 && $varname1 !== "") {
             echo $orden;
         } else {
             echo "ERROR1";
-        }
+        }*/
+           echo $orden;
     } else {
         echo "ERROR2";
     }

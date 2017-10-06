@@ -196,6 +196,17 @@ class Orden
     protected $feeServicios;
 
     /**
+     * @var float
+     * @Gedmo\Versioned()
+     * @Assert\GreaterThanOrEqual(
+     *     value = 0,
+     *     message="Este valor debe ser mayor o igual que {{ compared_value }}."
+     * )
+     * @ORM\Column(name="feeemergencia_servicios", type="float")
+     */
+    protected $feeEmergenciaServicios;
+    
+    /**
      * @var string
      *
      * @ORM\Column(name="observaciones", type="text",nullable=true)
@@ -285,6 +296,13 @@ class Orden
      * @ORM\Column(name="numerosdeboleto", type="string")
      */
     protected $numerosDeBoleto;
+    
+     /**
+     * @var integer
+     *
+     * @ORM\Column(name="aerolinea", type="integer")
+     */
+    protected $aerolinea;
     
     public function __construct() {
         $this->formasPagos = new ArrayCollection();
@@ -1307,5 +1325,18 @@ class Orden
         $this->numerosDeBoleto = $numerosDeBoleto;
     }
 
+    function getFeeEmergenciaServicios() {
+        return $this->feeEmergenciaServicios;
+    }
 
+    function setFeeEmergenciaServicios($feeEmergenciaServicios) {
+        $this->feeEmergenciaServicios = $feeEmergenciaServicios;
+    }
+    function getAerolinea() {
+        return $this->aerolinea;
+    }
+
+    function setAerolinea($aerolinea) {
+        $this->aerolinea = $aerolinea;
+    }
 }

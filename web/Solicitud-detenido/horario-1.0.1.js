@@ -23,15 +23,9 @@ function Horarios(){
 	if (emergencia() && helpm){
 		PopupMen(9);
 		helpm = false;
-		form.selectFee.selectedIndex=4 ;
-		form.selectFee.disabled = 1;
-		
-		
 	}
 	else if(!emergencia() && !helpm){
 		helpm = true;
-		form.selectFee.selectedIndex=0 ;
-		form.selectFee.disabled = 0;
 	}
 	titulofrom = TituloSolicitud();
 	divTitulo.innerHTML=titulofrom;
@@ -52,6 +46,23 @@ function emergencia() {
 	return false;
 }
 
+function emergenciaReal() {
+	$.ajax({
+			url: "timer.php",
+			cache: false,
+			success: function(msg){	
+                            if(msg=="T"){
+                                $('#emergenciaPersistir').val('1');
+                                
+                            }else{
+                                $('#emergenciaPersistir').val('0');
+                            }
+			}
+	});		
+	
+	if($('#emergenciaPersistir').val() ==='1'){ return true;}
+	return false;
+}
 function makeArray(n){
 	this.length = n;
 	for (i=1;i<=n;i++){this[i]=0;}

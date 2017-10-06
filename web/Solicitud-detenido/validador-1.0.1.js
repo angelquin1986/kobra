@@ -74,7 +74,6 @@ $(document).ready(function(){
 		PopupCls();
 		PopupMen(1);
 
-		if (emergencia()) form.selectFee.disabled = 0;
 		form.ttcard.disabled = 0;
 		form.timelimit.disabled = 0;
 		form.emergencia.disabled = 0;

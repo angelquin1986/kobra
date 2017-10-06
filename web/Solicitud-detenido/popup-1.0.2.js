@@ -173,6 +173,10 @@ function PopupMen(mensaje, datos){
 		Titulo = "<img src='img/icon-48-alert.png'>&nbsp;Advertencia ";
 		Cuerpo = "Estimado agente, su usuario se encuentra <b>bloqueado</b> <br/> Por favor contactes&eacute; con el Dpto. Comercial de MYM Travel ";
 		Boton1="<button type='button' onclick='PopupCls();' >Cerrar</button>";
+	}else if(mensaje==45){
+		Titulo = "<img src='img/icon-48-alert.png'>N&uacutemero de orden no existe";
+		Cuerpo = "N&uacutemero de orden:"+ datos +" no existe";
+		Boton1="<button type='button' onclick='PopupCls();' style='width: 60px;' >Cerrar</button>";
 	}
 
 	divTransparente=document.getElementById("transparencia");

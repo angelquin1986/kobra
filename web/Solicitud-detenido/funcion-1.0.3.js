@@ -107,12 +107,11 @@ function ClearFrom() {
         form.elements[i].value = "";
         form.elements[i].className = claseNormal;
     }	
-	form.selectPasajerosEmitir.selectedIndex = 1;
-	form.selectCiudad.selectedIndex = 0;
+    form.selectPasajerosEmitir.selectedIndex = 1;
+    form.selectCiudad.selectedIndex = 0;
     form.selectBoletos.selectedIndex = 0;
     form.selectOperador.selectedIndex = 0;
     form.selectServicio.selectedIndex = 0;
-    form.selectFee.selectedIndex = 0;
     form.selectTipo.selectedIndex = 0;
 //	form.selectTipo2.selectedIndex = 0;
     form.selectBan2.selectedIndex = 0;
@@ -139,10 +138,7 @@ function ClearFrom() {
     document.getElementById("tdel").value = "Borrar tarjetas";
     
     clearFileInput('file1');
-    if (emergencia()) {
-        form.selectFee.selectedIndex = 4;
-        form.selectFee.disabled = 1;
-    }
+    
 //	form.selectCiudad.prototype;
     document.getElementById("selectCiudad").focus();
 
@@ -176,10 +172,22 @@ function ClearCanal() {
 
 function ocultarFila(num, ver) {
     dis = ver ? '' : 'none';
+    //console.log(num);
+    
     tr = document.getElementById('formu').getElementsByTagName('tr')[num];
+    //console.log(tr);
     tr.style.display = dis;
 }
-
+function filaVisual(classNombre, mostrarBool) {
+    //console.log(classNombre);
+    dis = mostrarBool ? '' : 'none';
+    $('tr.'+classNombre).css("display",dis);
+}
+function classVisual(classNombre, mostrarBool) {
+    //console.log(classNombre);
+    dis = mostrarBool ? '' : 'none';
+    $('.'+classNombre).css("display",dis);
+}
 function llenarEmpresas() {
     $.ajax({
         type: "POST",

@@ -16,7 +16,10 @@ if(isset($_POST['action']) && !empty($_POST['action'])) {
             break;
         case 'dbAero' : 
             $retorno = dbObtenerAerolineas();
-            break;               
+            break; 
+        case 'dbOrden' : 
+            $retorno = dbObtenerOrden($_POST['numeroOrden'],$_POST['tipo']);
+            break; 
     }
 }
 echo $retorno;

@@ -68,7 +68,7 @@ $(document).ready(function(){
 
 
 
-		if (emergencia()) form.selectFee.disabled = 0;
+		
 		form.ttcard.disabled = 0;
 		form.timelimit.disabled = 0;
 		form.emergencia.disabled = 0;
@@ -93,7 +93,14 @@ $(document).ready(function(){
 		PopupCls();
 		PopupMen(1);
 	});*/
-	$('#inputRuc').change(function() {
+    //colocar el valor de horario emergencia
+    emergenciaReal();
+    //detectar la perdida del foco
+   /** $("#inputOrden").blur(function(){
+        console.log(form.inputOrden.value);
+    		recuperarOrden(form.inputOrden.value,'emision');
+    });*/
+    $('#inputRuc').change(function() {
 		form.inputRuc.className=claseNormal;
                 var idEmp =  form.selectEmpresaRecibe.options[form.selectEmpresaRecibe.selectedIndex].value;
 		//recuperarAgencia($(this).val(),idEmp); 
@@ -128,21 +135,13 @@ $(document).ready(function(){
 	$('#selectCiudad').change(function() {
 		form.selectCiudad.className=claseNormal;
     });
-	$('#selectBoletos').change(function() {
+    //seleccion de boletos
+    $('#selectBoletos').change(function() {
 		Operadora();
 		form.selectBoletos.className=claseNormal;
-		if(form.selectServicio.selectedIndex == 2) {
-			if(form.selectBoletos.selectedIndex == 1) {
-				form.selectFee.selectedIndex=2;
-			}else if (form.selectBoletos.selectedIndex == 2){
-				form.selectFee.selectedIndex=3;
-			}
-		}else{
-//			form.selectFee.selectedIndex=0;
-		}
+		
     });
-
-	$('#selectOperador').change(function() {
+    $('#selectOperador').change(function() {
 		if(form.selectOperador.selectedIndex == 1){
 			PopupMen(30);
 		}
@@ -154,68 +153,56 @@ $(document).ready(function(){
     $('#selectServicio').change(function() {
         //alert(form.selectServicio.selectedIndex);
 		ClearB();
+                console.log(this.value);
 		form.pasajero.style.visibility = "hidden";
 		form.selectServicio.className=claseNormal;
 		form.selectBoletos.selectedIndex = 0;
 		form.selectOperador.selectedIndex = 0;
-		form.selectFee.disabled = 0;
 		
-		if(form.selectServicio.selectedIndex == 3) {
-			form.selectFee.selectedIndex=1;
-		}else{
-			form.selectFee.selectedIndex=0;
-		}
-		if(form.selectServicio.selectedIndex == 1){
+		if(this.value === 'EMISION'){
 			filacoculta(false,true,false);
-			ocultarFila(17,true);
-                        $('.trRecordGdsNumeroBoletos').css("display", "")
+			filaVisual('idRowNumeroPasajeros',true);
+                        filaVisual('idRowAerolineaDatosReserva',true);
+                        classVisual('trRecordGdsNumeroBoletos',true);
+                        //$('.trRecordGdsNumeroBoletos').css("display", "")
 		}
-		else if(form.selectServicio.selectedIndex == 2){
+		else if(this.value === 'REVISION'){
 			form.pasajero.style.visibility = "visible";
 			filacoculta(true,true,false);
-			form.selectFee.disabled = 1;
-			ocultarFila(17,false);
-                       
+			filaVisual('idRowNumeroPasajeros',false);
 		}
-		else if(form.selectServicio.selectedIndex == 3){
+		else if(this.value === 'ANULACION'){
 			form.pasajero.style.visibility = "visible";
 			filacoculta(true,false,true);
-			form.selectFee.disabled = 1;
-			ocultarFila(17,false);
-		}else{
-			form.selectFee.disabled = 0;
+			filaVisual('idRowNumeroPasajeros',false);
 		}
     });
-	$('#inputRecord').change(function() {
+    $('#inputRecord').change(function() {
             $('#inputRecord').val(form.inputRecord.value.toUpperCase());
 		form.inputRecord.className=claseNormal;
-        });
-	$('#inputTourcode').change(function() {
+    });
+    $('#inputTourcode').change(function() {
         $('#inputTourcode').val(form.inputTourcode.value.toUpperCase());
 		form.inputTourcode.className=claseNormal;
     });
-	$('#selectFee').change(function() {
-		form.selectFee.className=claseNormal;
+    $('#Boletos').change(function() {
+        form.Boletos.className=claseNormal;
     });
-	$('#Boletos').change(function() {
-		form.Boletos.className=claseNormal;
-	});
-	$('#pasajero').change(function() {
+    $('#pasajero').change(function() {
         $('#pasajero').val(form.pasajero.value.toUpperCase());
 		form.pasajero.className=claseNormal;
     });
 
-	$('#inputOrden').change(function() {
-		form.inputOrden.className=claseNormal;
-	});
-	$('#tktt').change(function() {
-		form.tktt.className=claseNormal;
-	});
-	
-	$('#inputPnr').change(function() {
+    $('#inputOrden').change(function() {
+    form.inputOrden.className=claseNormal;
+    });
+    $('#tktt').change(function() {
+	form.tktt.className=claseNormal;
+    });
+    $('#inputPnr').change(function() {
 		form.inputPnr.className=claseNormal;
     });
-	$('#inputTarifa').change(function() {
+    $('#inputTarifa').change(function() {
 //		form.inputTarifa.className=claseNormal;
     });
 	$('#auto_canal1').change(function() {
@@ -356,7 +343,8 @@ $(document).ready(function(){
 		if(form.selectPago.selectedIndex > 1){
 			vfilas = true
 		}
-		ocultarFila(64,vfilas);
+		filaVisual('idRowNumeroVTC',vfilas);
+              
     });
 	$('#inputVtc').change(function() {
 		form.inputVtc.className=claseNormal;
@@ -795,6 +783,7 @@ function Operadora(){
         selectadd(y,"UNITED");*/
 		recuperarAerolineas();
 	}
+        recuperarAerolineasDatosReserva();
 }
 
 function Mayusculas(field) {
@@ -907,7 +896,7 @@ function validaNumero(valor, permiteVacio, minimo, maximo){
 }
 function validaSelect(valor){
 
-	if(valor == 0 || valor == ""){
+	if(valor === 0 || valor < 0 || valor == ""){
 //	if(valor == "Seleccione..." || valor == "") {
 		return false;
 	}
@@ -950,7 +939,6 @@ function FromReset(){
 	form.selectBoletos.selectedIndex = 0;
 	form.selectOperador.selectedIndex = 0;
 	form.selectServicio.selectedIndex = 0;
-	form.selectFee.selectedIndex = 0;
 	form.selectTipo.selectedIndex = 0;
 //	form.selectTipo2.selectedIndex = 0;
 	form.selectBan2.selectedIndex = 0;
@@ -981,58 +969,55 @@ function FromReset(){
 function filacoculta(rfilas,efilas,afilas){
     //console.log(document.getElementById('formu').getElementsByTagName('tr')[0].id);
     //console.log($('.trRecordGdsNumeroBoletos'));
-        $('.trRecordGdsNumeroBoletos').css("display", "none");
-	ocultarFila(15,rfilas);
-	ocultarFila(22,rfilas);
+        classVisual('trRecordGdsNumeroBoletos',false);
+        filaVisual('idRowAerolineaDatosReserva',false)
+        
+	filaVisual('idRowNumeroDeOrden',rfilas);
+	filaVisual('idRowNumeroBoletoNumeroPasajero',rfilas);
+        
 	
+	filaVisual('idRowCopiarReserva',efilas);
+        filaVisual('idRowCopiarReserva2',efilas);
+        filaVisual('idRowPagoDirecto',efilas);
+	filaVisual('idRowTipoPago',efilas);
+	filaVisual('idRowValorPago',efilas);
 	
-	ocultarFila(25,efilas);
-	ocultarFila(26,efilas);
-	ocultarFila(27,efilas);
-	ocultarFila(28,efilas);
-	
-	ocultarFila(30,efilas);
-	ocultarFila(31,efilas);
-	ocultarFila(32,efilas);
-	ocultarFila(33,efilas);
-		
-	ocultarFila(34,efilas);
-	ocultarFila(35,efilas);
-	ocultarFila(36,efilas);
-		
-	ocultarFila(37,efilas);
-	ocultarFila(38,efilas);
-	ocultarFila(39,efilas);
-	ocultarFila(40,efilas);
-		
-	ocultarFila(41,efilas);
-	ocultarFila(42,efilas);
-	ocultarFila(43,efilas);
-	ocultarFila(44,efilas);
+        filaVisual('idRowDepositoEfectivo',efilas);
+	filaVisual('idRowDepositoAlBanco',efilas);
+	filaVisual('idRowDepositoAlBancoComponente',efilas);
 
-	ocultarFila(45,efilas);
-	ocultarFila(46,efilas);
-	ocultarFila(47,efilas);
-	ocultarFila(48,efilas);
-	ocultarFila(49,efilas);
-	ocultarFila(50,efilas);
-	ocultarFila(51,efilas);
-	ocultarFila(52,efilas);
-	ocultarFila(53,efilas);
-	ocultarFila(54,efilas);
-	ocultarFila(55,efilas);
-	ocultarFila(56,efilas);
-	ocultarFila(57,efilas);
-	ocultarFila(58,efilas);
-	ocultarFila(59,efilas);
-	ocultarFila(60,efilas);
-	ocultarFila(61,efilas);
-	ocultarFila(62,efilas);
+	
+        filaVisual('idRowNumeroDocumento',efilas);
+	filaVisual('idRowValorDeposito',efilas);
+        
+	filaVisual('idRowTransferenciaBancaria',efilas);
+	filaVisual('idRowBancoMM',efilas);
+	filaVisual('idRowNumeroDocumentoB',efilas);
+	filaVisual('idRowValorTransferido',efilas);
+	filaVisual('idRowNumeroTarjetaCredito',efilas);
 
-	ocultarFila(63,afilas);
-	ocultarFila(64,afilas);
-        //ocultarFila(65,afilas);
-	ocultarFila(70,false);
+	filaVisual('idRowEmisorVTC',efilas);
+	filaVisual('idRowAereolina',efilas);
+	filaVisual('idBancoEmisorTarjeta',efilas);
+	filaVisual('idBancoTipoTarjetaCredito',efilas);
+	filaVisual('idBancoNumeroTarjetaCredito',efilas);
+	filaVisual('idBancoNombreTarjetaHabiente',efilas);
+	filaVisual('idrowFechaCaucidadTarjeta',efilas);
+	filaVisual('idrowCodigoSeguridadTarjeta',efilas);
+	filaVisual('idRowTipoDePagoTarjeta',efilas);
+	filaVisual('idRowPlazoTarjetaCredito',efilas);
+	filaVisual('idRowTipoAutorizacionTarjeta',efilas);
+	filaVisual('idRowNumeroAutorizacionTarjeta',efilas);
+	filaVisual('idRowValorTarjeta',efilas);
+	filaVisual('idRowinteresTarjeta',efilas);
+	filaVisual('idRowValorTarjeta',efilas);
+	filaVisual('idRowPagoAPasajerosTarjeta',efilas);
+	filaVisual('idRowGuardarTarjeta',efilas);
+	filaVisual('idRowTarjetaOservaciones',efilas);
+
+	filaVisual('idRowFormaPagoT',afilas);
+	filaVisual('idRowNumeroVTC',afilas);
+        filaVisual('idRowCondiciones',false);
 }
 function recuperarAgencia(ruc, idEmp){
 	 $.ajax({
@@ -1055,44 +1040,44 @@ function recuperarAgencia(ruc, idEmp){
     });
 }
 
-function recuperarAgente(user, idEmp ,pwd){
+function recuperarAgencia(ruc, idEmp){
 	 $.ajax({
         type: "POST",
-        data: {action: 'dbInfoAgente', id: user, ag : idEmp, pass:pwd},
+        data: {action: 'dbAgencia', id: ruc, emp : idEmp},
         url: 'DBJSONInt.php',        
         success: function (data) {
-            $("#hdnIdAgente").val("");			
-            $("#inputAgente").val("");		
-            $("#inputPwdAgente").val("");		            
-            $("#inputCorreo").val("");			
-            $("#inputTelefono").val("");			
-            $("#inputCelular").val("");		
-            $("#inputRuc").val("");		
             $("#inputAgencia").val("");		
-            $("#hdnIdAgencia").val("");		            
+            $("#hdnIdAgencia").val("");			
             var obj = JSON.parse(data);
-            if(obj.error > 0 ){
-		$("#inputUsuarioAgente").val("");
-                if (obj.error === 41) {
-                    PopupMen(obj.error, obj.times);
-                }else{
-                    PopupMen(obj.error);
-                }
-            }
-            else{
-                $("#hdnIdAgente").val(obj.id);			
-                $("#inputAgente").val(obj.nombre + " " + obj.apellidos);
-                $("#inputCorreo").val(obj.email);			
-                $("#inputTelefono").val(obj.telefono);			
-                $("#inputCelular").val(obj.celular);	
-                $("#inputRuc").val(obj.ruc);		
-                $("#inputAgencia").val(obj.nombreAgencia);		
-                $("#hdnIdAgencia").val(obj.idAG);	
-                $("#inputPwdAgente").attr("readonly","true");
-                $("#inputPwdAgente").css("background-color","#CCCCCC");
+			if(obj.error > 0 ){
+				$("#inputRuc").val("");
+				PopupMen(obj.error);
+			}
+			else{			
+				$("#inputAgencia").val(obj.nombre);		
+				$("#hdnIdAgencia").val(obj.id);
+			}
+        }
+    });
+}
+
+function recuperarOrden(numeroOrden,tipo){
+     var bool = false;
+     $.ajax({
+        type: "POST",
+        async: false,
+        data: {action: 'dbOrden', numeroOrden: numeroOrden, tipo : tipo},
+        url: 'DBJSONInt.php',        
+        success: function (data) {
+            datos=JSON.parse(data);
+            if(datos.error != 0){
+                bool =false;
+            }else{
+                bool= true;
             }
         }
     });
+    return bool;
 }
 
 function recuperarAerolineas(){
@@ -1103,6 +1088,26 @@ function recuperarAerolineas(){
         dataType: 'json',
         success: function (data) {
             var select = $("#taereo"), options = '';
+            select.empty();
+            select.append(" <OPTION value='' >Seleccione...</OPTION>");
+            for (var i = 0; i < data.length; i++)
+            {
+                options += "<option value='" + data[i]['id'] + "'>" + data[i]['reg'] + "</option>";
+            }
+
+            select.append(options);
+        }
+    });
+}
+
+function recuperarAerolineasDatosReserva(){
+	 $.ajax({
+        type: "POST",
+        data: {action: 'dbAero'},
+        url: 'DBJSONInt.php',
+        dataType: 'json',
+        success: function (data) {
+            var select = $("#idAerolineaDatosReserva"), options = '';
             select.empty();
             select.append(" <OPTION value='' >Seleccione...</OPTION>");
             for (var i = 0; i < data.length; i++)

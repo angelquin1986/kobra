@@ -40,6 +40,31 @@ function dbObtenerAerolineas() {
     return json_encode($json);
 }
 
+//obtener orden por numero y tipo
+function dbObtenerOrden($numeroOrden,$tipo) {
+
+    $db = new PDO($GLOBALS['dsn'], $GLOBALS['nombre_usuario'], $GLOBALS['contraseña'], $GLOBALS['opciones']);
+    $json = array();
+    try {
+        $query = "SELECT id,numero_orden FROM orden where numero_orden=:numeroOrden and tipo=:tipoServicio;";
+        $sth = $db->prepare($query);
+        $sth->execute(array(':tipoServicio' => $tipo, ':numeroOrden' => $numeroOrden));
+        $resultado = $sth->fetchAll();
+        if (!count($resultado) > 0) {
+            $json['error'] = 40;
+        }
+        foreach ($resultado as $value) {
+            $json['id'] = $value['id'];
+            $json['numero_orden'] = $value['numero_orden'];
+            $json['error'] = 0;
+        }
+    } catch (Exception $exc) {
+        fnEscribirLogErrores($exc->getMessage(),$exc->getTraceAsString());
+    }
+    $db = null;
+    return json_encode($json);
+}
+
 function dbObtenerAgenciaxRUC($ruc, $idEmpresa) {
 
     $db = new PDO($GLOBALS['dsn'], $GLOBALS['nombre_usuario'], $GLOBALS['contraseña'], $GLOBALS['opciones']);
@@ -541,7 +566,7 @@ function curlAlmacenarSolicitudOrden($post, $files, $numeroOrden) {
 function generarArrayEnvioOrden($post, $nombreAdjunto, $numeroOrden, $prioridadCalculada, $idGDS) {
     $idAgente = filtrarPost($post, 'hdnIdAgente');
     $tipoServicio = strtolower(filtrarPost($post, 'selectServicio'));
-    $feeServicio = floatval(filtrarPost($post, 'selectFee'));
+    //$feeServicio = floatval(filtrarPost($post, 'selectFee'));
     $tipoBoleto = (filtrarPost($post, 'selectBoletos') == 'NACIONALES' ? 'nacional' : 'internacional');
     $numeroPasajeros = 0;
     $arrayTipoOrden = array();
@@ -550,11 +575,11 @@ function generarArrayEnvioOrden($post, $nombreAdjunto, $numeroOrden, $prioridadC
     $arrayDepefectivoTransferenciaBancaria = array();
     switch ($tipoServicio) {
         case 'revision':
-            if ($tipoBoleto == 'nacional') {
+            /**if ($tipoBoleto == 'nacional') {
                 $feeServicio = 10;
             } else {
                 $feeServicio = 25;
-            }
+            }*/
             $arrayTipoOrden = array(
                 'reservaPnr' => filtrarPost($post, 'inputPnr'),
                 'tarifaReserva' => filtrarPost($post, 'inputTarifa'),
@@ -563,7 +588,7 @@ function generarArrayEnvioOrden($post, $nombreAdjunto, $numeroOrden, $prioridadC
             );
             break;
         case 'anulacion':
-            $feeServicio = 5;
+            //$feeServicio = 5;
             $arrayTipoOrden = array(
                 'datosBoleto' => filtrarPost($post, 'boleN'),
                 'vtc' => filtrarPost($post, 'inputVtc'), //El numero de vtc si existe
@@ -662,7 +687,6 @@ function generarArrayEnvioOrden($post, $nombreAdjunto, $numeroOrden, $prioridadC
             'empresa' => filtrarPost($post, 'selectEmpresaRecibe'), //el id
             'recordGds' => filtrarPost($post, 'inputRecord'),
             'tourcode' => filtrarPost($post, 'inputTourcode'),
-            'feeServicios' => $feeServicio,
             'observaciones' => filtrarPost($post, 'inputComentario'), //Este es el comentario del agente
             'adjunto' => strlen($nombreAdjunto) > 0 ? $GLOBALS['url_adjuntos'] . $nombreAdjunto : '', //se guardara el adjunto y en caso de fallo se elimina
             'gds' => $idGDS, //id del gds
@@ -677,8 +701,10 @@ function generarArrayEnvioOrden($post, $nombreAdjunto, $numeroOrden, $prioridadC
                 'pagosDirectos' => $arrayPagoDirecto,
                 'detbs' => $arrayDepefectivoTransferenciaBancaria
             ),
-            'numeroDeBoletos' =>filtrarPost($post, 'inputNumeroBoletos')
-        )
+            'numeroDeBoletos' =>filtrarPost($post, 'inputNumeroBoletos'),
+            'procesadaEmergencia' =>filtrarPost($post,'emergenciaPersistir'),
+            'aerolineaFee' =>filtrarPost($post,'valueAereolinea'),
+            'tipoServicio' =>$tipoServicio)
     );
     return $arrayResult;
 }

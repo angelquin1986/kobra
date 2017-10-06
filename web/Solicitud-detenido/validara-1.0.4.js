@@ -8,7 +8,6 @@ function validaForm(){
 	for(i=1; i<=69; i++) {
 		form.elements[i].className=claseNormal;
 	}
-	if(emergencia()) form.selectFee.selectedIndex = 4;
 	var errorCondiciones = 0;
 	PopupMen(1);
 	error=0;
@@ -31,7 +30,7 @@ function validaForm(){
 	var norden=eliminaEspacios(form.inputOrden.value);	
 	var operador=(form.selectOperador.selectedIndex);
 	var servicio=(form.selectServicio.selectedIndex);
-	var femision=(form.selectFee.selectedIndex);
+	
 	
 	var record=eliminaEspacios(form.inputRecord.value);
 	var tourcode=eliminaEspacios(form.inputTourcode.value);
@@ -73,10 +72,10 @@ function validaForm(){
 		if(!validaLongitud(norden, 0, 10, 10)) campoError(form.inputOrden);
 	}
 	if(!validaSelect(boletos)) campoError(form.selectBoletos);
-        if(!validaSelect(nPasajeroEmitido)) campoError(form.selectPasajeroEmitir);
+        
 	if(!validaSelect(operador)) campoError(form.selectOperador);
 
-	if(!validaSelect(femision)) campoError(form.selectFee);
+	
 	if(!validaLongitud(record, 0, 5, 50)) campoError(form.inputRecord);
 	if(!validaLongitud(tourcode, 1, 5, 50)) campoError(form.inputTourcode);
 
@@ -98,8 +97,6 @@ function validaForm(){
 	else{
 		if(form.selectServicio.selectedIndex == 2) {
 			if(form.tktt.length == 0) campoError(form.tktt);
-			if(form.selectServicio.selectedIndex == 1)document.getElementById("selectFee").selectedIndex = 2;
-			if(form.selectServicio.selectedIndex == 2)document.getElementById("selectFee").selectedIndex = 3;
 		}
 		if(!validaLongitud(pnr, 0, 10, 900000000000)) campoError(form.inputPnr);
 		if(!validaLongitud(tarifa, 0, 10, 900000000000)) campoError(form.inputTarifa);
@@ -154,11 +151,25 @@ function validaForm(){
 
 		if(!validaLongitud(form.tarjetac.value, 0, 5, 9000000000)) campoError(form.tarjetac);
 	}
-        if(form.selectServicio.selectedIndex === 1){
+       // alert($('#idAerolineaDatosReserva').prop('selectedIndex'));
+        //valida el valor seleccionado
+        if($('#selectServicio').val() === 'EMISION'){
+           if(!validaSelect(nPasajeroEmitido)) campoError(form.selectPasajeroEmitir);
             //validar numero de boletos
             var numeroBoleto = eliminaEspacios($('#inputNumBoletos').val());
             if(!validaLongitud(numeroBoleto, 0, 1, 99)) campoErrorElement($('#inputNumBoletos'));
+            //validar aereolinea
+            if(!validaSelect($('#idAerolineaDatosReserva').prop('selectedIndex'))) campoErrorElement($('#idAerolineaDatosReserva'));
         }
+        var errorOrden=false;
+        //validar numero de orden 
+        if($('#selectServicio').val() === 'REVISION' || $('#selectServicio').val() === 'ANULACION' ){
+            alert(recuperarOrden(form.inputOrden.value,'emision'));
+             if(!recuperarOrden(form.inputOrden.value,'emision')){
+                 errorOrden=true;
+             }
+        }
+       
         
 	if(error == 1){
             PopupMen(7);
@@ -166,6 +177,10 @@ function validaForm(){
 	}
         if(errorCondiciones == 1){
 		PopupMen(43);
+		return false;
+	}
+        if(errorOrden){
+		PopupMen(45,form.inputOrden.value);
 		return false;
 	}
 	PopupMen(2);
