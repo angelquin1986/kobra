@@ -8,6 +8,6 @@ CREATE TABLE `aerolineafee` (
   `origen` varchar(45) NOT NULL,
   PRIMARY KEY (`id`)
 );
-ALTER TABLE `orden`
+ALTER TABLE `Orden`
 ADD COLUMN  `feeemergencia_servicios` double DEFAULT NULL,
 ADD COLUMN  `aerolinea` int(11) DEFAULT NULL;
