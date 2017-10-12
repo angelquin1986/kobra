@@ -13,6 +13,7 @@ use aplicacion\BaseBundle\Entity\Empresa;
 use aplicacion\EmisionesBundle\Entity\Gds;
 use aplicacion\EmisionesBundle\Entity\Estadoorden;
 use aplicacion\EmisionesBundle\Entity\Usuariointerno;
+use aplicacion\EmisionesBundle\Utilitarios\CalculoFee;
 use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -86,102 +87,7 @@ class CyborgController extends Controller
     $result['detalle_respuesta']='Error de credenciales.';
     return new Response(json_encode($result));        
   }
-
-  public function calcularFee($emParameter,$procesoEmergencia,$idAerolineaFee,$tipoBoletoParam,$tipoServicio,$origen){
-      //validar el tipo boleto
-      $tipoBoleto = 'N';
-      $this->container->get('logger')->error('tipoServicio',  array('tipoServicio' => strtoupper($tipoServicio)));
-      $this->container->get('logger')->error('tipoBoleto',  array('tipoBoleto' => $tipoBoletoParam));
-      if($tipoBoletoParam ==='internacional'){
-          $tipoBoleto='I';
-      }
-      //tomar el emergente
-      $feeEmergente= 0;
-      if($procesoEmergencia ==='1'){
-        $feeEmergenteObject =$emParameter->getRepository('EmisionesBundle:AeroLineafee')->findOneBy(array(
-            'tipoServicio'=>'FE',
-            'tipoaerolinea'=>$tipoBoleto,
-            'esPredeterminada'=>'1',
-            'origen'=>$origen
-        ));
-        if($feeEmergenteObject){
-            $feeEmergente = $feeEmergenteObject->getValorfee();
-            $this->container->get('logger')->error('feeEmergenteBase',  array('feeEmergenteBase' => $feeEmergente));
-        }
-      }
-      
-      $feeAerolina=0;
-      //validar el tipo de servicio
-      if(strtoupper($tipoServicio)==='EMISION'){
-          $this->container->get('logger')->error('EMISION',  array('EMISION' => 'EMISION'));
-          //tomar el registro de la aereolina y el tipo boleto 
-          $feeAerolinaObject =$emParameter->getRepository('EmisionesBundle:Aerolineafee')->findOneBy(array(
-                'aerolinea'=>$idAerolineaFee,
-                'tiposervicio'=>'E',
-                'tipoaerolinea'=>$tipoBoleto,
-                'esPredeterminada'=>'0',
-                'origen'=>$origen
-          ));
-          if($feeAerolinaObject){
-              $feeAerolina = $feeAerolinaObject->getValorfee();
-              $this->container->get('logger')->error('feeAerolineaExiste',  array('fee' => $feeAerolina,'aerolinea' => $idAerolineaFee));
-          }else{
-            //si no encuentra la aerolina tomar el fee  para todas las aerolineas
-            $feeAerolinaObject =$emParameter->getRepository('EmisionesBundle:Aerolineafee')->findOneBy(array(
-                'tipoaerolinea'=>$tipoBoleto,
-                'tiposervicio'=>'E',
-                'esPredeterminada'=>'1',
-                'origen'=>$origen
-            ));
-            if($feeAerolinaObject){
-                $feeAerolina = $feeAerolinaObject->getValorfee();
-                $this->container->get('logger')->error('feeAerolineaNoExiste',  array('fee' => $feeAerolina));
-            }else{
-                $feeAerolina=0;
-                $this->container->get('logger')->error('feeAerolineaNoExiste',  array('no hay en base' =>'0'));
-            }
-          }
-      }else{
-          if(strtoupper($tipoServicio)==='REVISION'){
-            $this->container->get('logger')->error('REVISION',  array('REVISION' => 'REVISION'));
-          //para la revision solo son el por defaul y por tipo
-            $feeAerolinaObject =$emParameter->getRepository('EmisionesBundle:Aerolineafee')->findOneBy(array(
-                'tipoaerolinea'=>$tipoBoleto,
-                'tiposervicio'=>'R',
-                'esPredeterminada'=>'1',
-                'origen'=>$origen
-            ));
-            if($feeAerolinaObject){
-                $feeAerolina = $feeAerolinaObject->getValorfee();
-                $this->container->get('logger')->error('feeDefault',  array('AerolineafeeAerolineafee' =>$feeAerolina));
-            }else{
-                $feeAerolina=0;
-            }
-          }else{
-               if(strtoupper($tipoServicio)==='ANULACION'){
-                    $this->container->get('logger')->error('ANULACION',  array('ANULACION' => 'ANULACION'));
-                    $feeAerolinaObject =$emParameter->getRepository('EmisionesBundle:AeroLineafee')->findOneBy(array(
-                        'tipoaerolinea'=>$tipoBoleto,
-                        'tiposervicio'=>'A',
-                        'esPredeterminada'=>'1',
-                        'origen'=>$origen
-                    ));
-                    if($feeAerolinaObject){
-                        $feeAerolina = $feeAerolinaObject->getValorfee();
-                        $this->container->get('logger')->error('feeDefault',  array('feeDefault' =>$feeAerolina));
-                    }else{
-                        $feeAerolina=0;
-                    }
-               }
-          }
-      }
-      $this->container->get('logger')->error('feeTotales',  array('fee' =>$feeAerolina,'feeEmergente' =>$feeEmergente));
-      return array(
-        "fee" => $feeAerolina,
-        "feeEmergente" => $feeEmergente,
-       );   
-  }
-
+    
   public function SaveAction(Request $request)
   {  
        
@@ -225,8 +131,10 @@ class CyborgController extends Controller
          $orden->setNumPasajeros($data['numPasajeros']);
          $orden->setTipoBoleto($data['tipoBoleto']);
          
+        $feeServices = $this->get('FeeServices');
+       
          //calculos del fee
-         $valoresFee= $this->calcularFee($em, $procesoEmergencia, $idAerolineaFee, $data['tipoBoleto'], $data['tipoServicio'],'F');
+         $valoresFee =  $feeResultado = $feeServices->calcularFee($procesoEmergencia, $idAerolineaFee, $data['tipoBoleto'], $data['tipoServicio'],'F');
          //almacenar los fee despues de haber calculado
          $orden->setFeeServicios($valoresFee['fee']);
          $orden->setFeeEmergenciaServicios($valoresFee['feeEmergente']);

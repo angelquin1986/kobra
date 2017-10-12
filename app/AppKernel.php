@@ -22,6 +22,8 @@ class AppKernel extends Kernel
             new Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle(),
             new aplicacion\AuditoriaBundle\AuditoriaBundle(),
             new APY\DataGridBundle\APYDataGridBundle(),
+            new FOS\RestBundle\FOSRestBundle(),
+            new aplicacion\RestBundle\RestBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

@@ -304,6 +304,15 @@ class Orden
      */
     protected $aerolinea;
     
+     /**
+     * @Gedmo\Versioned()
+     * @var $aerolineaEntidad
+     * @ORM\ManyToOne(targetEntity="Aerolinea")
+     * @ORM\JoinColumn(name="aerolinea", referencedColumnName="id")
+     */   
+    private $aerolineaEntidad;
+    
+    
     public function __construct() {
         $this->formasPagos = new ArrayCollection();
         $this->modificadoSupervisorCobros=false;
@@ -1339,4 +1348,18 @@ class Orden
     function setAerolinea($aerolinea) {
         $this->aerolinea = $aerolinea;
     }
+    
+    function getAerolineaEntidad() {
+        return $this->aerolineaEntidad;
+    }
+
+    function setAerolineaEntidad($aerolineaEntidad) {
+        $this->aerolineaEntidad = $aerolineaEntidad;
+    }
+    function setId($id) {
+        $this->id = $id;
+    }
+
+
+
 }

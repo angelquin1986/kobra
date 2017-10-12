@@ -1,0 +1,7 @@
+parameters:
+#    rest.example.class: aplicacion\RestBundle\Example
+
+services:
+#    rest.example:
+#        class: %rest.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]

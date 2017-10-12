@@ -5,10 +5,9 @@ namespace aplicacion\EmisionesBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-
-class EmisionType extends AbstractType
-{
-        /**
+class EmisionType extends AbstractType{
+    
+    /**
      * @param FormBuilderInterface $builder
      * @param array $options
      */
@@ -27,7 +26,7 @@ class EmisionType extends AbstractType
                 'attr'=> array('class' => 'form-control input-sm')
              ))
           
-            ->add('tipoBoleto','text',array('attr'=>array('class' => 'form-control input-sm')))
+            ->add('tipoBoleto','text',array('attr'=>array('id'=>'idTipoBoleto','class' => 'form-control input-sm')))
             ->add('estado', 'entity', array(
                 'class' => 'EmisionesBundle:Estadoorden',
                 'property'=>'nombre',
@@ -42,13 +41,24 @@ class EmisionType extends AbstractType
             ->add('recordNew','text',array('required'=>true,'attr'=>array('class' => 'form-control input-sm' )))
             ->add('numerosDeBoleto','text',array('required'=>true,'attr'=>array('class' => 'form-control input-sm' )))
             ->add('numerodeboletos','text',array('required'=>true,'attr'=>array('class' => 'form-control input-sm','readOnly'=>true )))
+            ->add('aerolineaEntidad', 'entity', array(
+                'class' => 'EmisionesBundle:Aerolinea',
+                'property'=>'getNombre',
+                'attr'=> array('class' => 'form-control input-sm'),
+                'empty_value'   => 'Seleccione...',
+                 'required'      => true,
+                ))
+            ->add('feeEmergenciaServicios','text',array('required'=>true,'attr'=>array('class' => 'form-control input-sm','readOnly'=>true )))
+            ->add('feeServicios','text',array('required'=>true,'attr'=>array('class' => 'form-control input-sm','readOnly'=>true )))
             ->add('tourcode','text',array('required'=>false,'attr'=>array('class' => 'form-control input-sm','readOnly'=>true)))
-            ->add('feeServicios','text',array('attr'=>array('class' => 'form-control input-sm')))
             ->add('fecha','datetime',array('widget'=>'single_text', 'format' => 'dd-MM-yyyy  --  H:m:s','attr'=>array('class' => 'form-control input-sm')))
             ->add('reservaPnr','textarea',array('attr'=>array('id'=>'reservapnr','class'=>'form-control','cols'=>80,'readOnly'=>true,'style'=>'height:260px;')))
             ->add('tarifaReserva','textarea',array('attr'=>array('id'=>'tarifareserva','class'=>'form-control','cols'=>80,'readOnly'=>true,'style'=>'height:280px;')))
             ->add('observaciones','textarea',array('required'=>false,'attr'=>array('id'=>'observaciones','class'=>'form-control','readOnly'=>true,'style'=>'height:100px;')))
             ->add('comentario','textarea',array('required'=>false,'attr'=>array('id'=>'comentario','class'=>'form-control','style'=>'height:100px;')))
+                
+            ->add('procesadaEmergencia','hidden')
+            ->add('tipo','hidden')
             
         ;
     }

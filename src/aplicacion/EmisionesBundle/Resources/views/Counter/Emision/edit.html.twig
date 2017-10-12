@@ -45,7 +45,7 @@
                                             <div class="input-group-addon">
                                                 <i class="fa fa-file-o"></i>
                                             </div>                                            
-                                            {{ form_widget(edit_form.numeroOrden)}}                                              
+                                            {{ form_widget(edit_form.numeroOrden,{'id':'idnumeroOrden'})}}                                              
                                         </div><!-- /.input group -->
                                         {{form_errors(edit_form.numeroOrden)}}
                                     </div>
@@ -87,7 +87,7 @@
                                             <div class="input-group-addon">
                                                 <i class="fa fa-file-o"></i>
                                             </div>
-                                            {{ form_widget(edit_form.tipoBoleto)}}
+                                            {{ form_widget(edit_form.tipoBoleto,{'id':'idTipoBoleto'})}}
                                                 <div id="wrap"> </div>
                                         </div><!-- /.input group -->
                                         {{form_errors(edit_form.tipoBoleto)}}
@@ -117,16 +117,6 @@
                                         {{form_errors(edit_form.estado)}}
                                     </div><!-- /.form group -->
                                     
-                                    <div class="form-group">
-                                        <label>FEE Servicios:</label>
-                                        <div class="input-group">
-                                            <div class="input-group-addon">
-                                                <i class="fa fa-money"></i>
-                                            </div>
-                                           {{ form_widget(edit_form.feeServicios)}}                                            
-                                        </div><!-- /.input group -->
-                                        {{form_errors(edit_form.feeServicios)}}
-                                    </div>
                                     
                                      <div class="form-group">
                                          <label>Record GDS:</label>
@@ -215,7 +205,40 @@
                                         </div><!-- /.input group -->
                                     </div><!-- /.form group -->
                                     
+                                    <div class="form-group">
+                                        <label>Aerolinea:</label>
+                                        <div class="input-group">
+                                            <div class="input-group-addon">
+                                                <i class="fa fa-user"></i>
+                                            </div> 
+                                            {{form_widget(edit_form.aerolineaEntidad,{'id':'idAerolinea'})}} 
+                                            {# <select id="idAerolinea"  #}
+                                        </div><!-- /.input group -->
+                                       {{form_errors(edit_form.aerolineaEntidad)}}
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Fee emergencia:</label>
+                                        <div class="input-group">
+                                            <div class="input-group-addon">
+                                                <i class="fa fa-money"></i>
+                                            </div> 
+                                            {{form_widget(edit_form.feeEmergenciaServicios,{'id':'idFeeEmergencia'})}} 
+                                            {# <select id="idAerolinea"  #}
+                                        </div><!-- /.input group -->
+                                       {{form_errors(edit_form.feeEmergenciaServicios)}}
+                                    </div>
+                                    <div class="form-group">
+                                        <label>FEE Servicios:</label>
+                                        <div class="input-group">
+                                            <div class="input-group-addon">
+                                                <i class="fa fa-money"></i>
+                                            </div>
+                                           {{ form_widget(edit_form.feeServicios,{'id':'idFeeServicios'})}}                                            
+                                        </div><!-- /.input group -->
+                                        {{form_errors(edit_form.feeServicios)}}
+                                    </div>
                                  </div>
+                                
                                </div>
                                     <div class="form-group">
                                         <label>Observaciones:</label>
@@ -373,7 +396,8 @@
                                         {%endif%}
                                    {%endfor%}
                                     
-                                    
+                                  {{form_widget(edit_form.procesadaEmergencia,{'id':'idProcesadaEmergencia'})}}   
+                                  {{form_widget(edit_form.tipo,{'id':'idTipo'})}}   
                               
                                 </div><!-- /.box-body -->
                                 <div class="box-footer">
@@ -393,12 +417,39 @@
  {% block javascripts %}
       {{parent()}}
      <script type="text/javascript">
-      function openAdjunto(adjunto)
-        {
-           window.open(String(adjunto)); 
+        function openAdjunto(adjunto){
+             window.open(String(adjunto)); 
         }
+        $('#idAerolinea').on('change', function() {
+        var $form = $('#idAerolinea').closest('form');
+        var data = {};
+        data.aerolinea = $('#idAerolinea').val();
+        data.idProcesadaEmergencia=$('#idProcesadaEmergencia').val();
+        data.idTipo = $('#idTipo').val();
+        data.idTipoBoleto = $('#idTipoBoleto').val();
+        $.ajax({
+                url : "{{ path('rest_homepage') }}",
+                type: "POST",
+                data :JSON.stringify(data),
+                contentType: "application/json; charset=utf-8",
+                crossDomain: true,
+                dataType: "json",
+                success: function(data, status, jqXHR) {
+                    $('#idFeeEmergencia').val(data['feeEmergente']);
+                    $('#idFeeServicios').val(data['fee']);
+                    console.log(data['feeEmergente']);
+                    console.log(data['fee']);
+                },
+                error: function(jqXHR, status ) {
+                    console.log(jqXHR);
+                    console.log(status);
+                }
+            });
+        });
      </script>
   {% endblock %}
+ 
+  
   
 
   

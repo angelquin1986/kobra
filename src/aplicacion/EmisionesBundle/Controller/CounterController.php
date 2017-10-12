@@ -28,6 +28,7 @@ use aplicacion\BaseBundle\Entity\Configuracion;
 use aplicacion\EmisionesBundle\Entity\Tarjetacredito;
 use aplicacion\EmisionesBundle\Entity\Pagodirecto;
 use aplicacion\EmisionesBundle\Entity\DepefectivoTransferenciabancaria;
+use aplicacion\EmisionesBundle\Utilitarios\CalculoFee;
 
 
 /**
@@ -930,7 +931,7 @@ class CounterController extends RegistrationController
         
         $em = $this->getDoctrine()->getManager();
         $entity = $em->getRepository('EmisionesBundle:Emision')->find($id);
-        $estadoviejo=$entity->getEstado()->getNombre();
+        $estadoviejo = $entity->getEstado()->getNombre();
         $fechaoriginal=$entity->getFecha();
         if (!$entity) {
              $this->get('session')->getFlashBag()->add('error', 'La emision que usted desea procesar no existe o ha sido eliminada!');

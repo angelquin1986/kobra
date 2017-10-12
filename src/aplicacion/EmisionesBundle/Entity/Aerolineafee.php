@@ -27,7 +27,7 @@ class Aerolineafee
      * @ORM\Column(name="aerolinea", type="integer")
      */
     private $aerolinea;
-
+    
     /**
      * @var string
      *

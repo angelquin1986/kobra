@@ -1,0 +1,7 @@
+# This file is auto-generated during the composer install
+services:
+  FeeServices:
+      class: aplicacion\EmisionesBundle\Utilitarios\CalculoFee
+      arguments: [ "@doctrine.orm.entity_manager" , "@service_container" ]
+      tags:
+            - { name: serializer.normalizer }

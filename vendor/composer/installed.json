@@ -20,7 +20,7 @@
         "require-dev": {
             "phpunit/phpunit": "3.7.*"
         },
-        "time": "2014-01-12 16:20:24",
+        "time": "2014-01-12T16:20:24+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -66,7 +66,7 @@
             "reference": "fe0936ee26643249e916849d48e3a51d5f5e278b",
             "shasum": ""
         },
-        "time": "2012-12-21 11:40:51",
+        "time": "2012-12-21T11:40:51+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -97,19 +97,19 @@
         "version_normalized": "1.16.0.0",
         "source": {
             "type": "git",
-            "url": "https://github.com/fabpot/Twig.git",
+            "url": "https://github.com/twigphp/Twig.git",
             "reference": "8ce37115802e257a984a82d38254884085060024"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/fabpot/Twig/zipball/8ce37115802e257a984a82d38254884085060024",
+            "url": "https://api.github.com/repos/twigphp/Twig/zipball/8ce37115802e257a984a82d38254884085060024",
             "reference": "8ce37115802e257a984a82d38254884085060024",
             "shasum": ""
         },
         "require": {
             "php": ">=5.2.4"
         },
-        "time": "2014-07-05 12:19:05",
+        "time": "2014-07-05T12:19:05+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -168,7 +168,7 @@
         "require": {
             "php": ">=5.3.2"
         },
-        "time": "2013-01-12 18:59:04",
+        "time": "2013-01-12T18:59:04+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -227,7 +227,7 @@
             "doctrine/cache": "1.*",
             "phpunit/phpunit": "4.*"
         },
-        "time": "2014-07-06 15:52:21",
+        "time": "2014-07-06T15:52:21+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -297,7 +297,7 @@
         "require": {
             "php": ">=5.3.2"
         },
-        "time": "2014-02-03 23:07:43",
+        "time": "2014-02-03T23:07:43+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -374,7 +374,7 @@
             "phpunit/phpunit": ">=3.7",
             "satooshi/php-coveralls": "~0.6"
         },
-        "time": "2013-10-25 19:04:14",
+        "time": "2013-10-25T19:04:14+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -443,7 +443,7 @@
         "require": {
             "php": ">=5.3.2"
         },
-        "time": "2013-01-10 21:49:15",
+        "time": "2013-01-10T21:49:15+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -517,7 +517,7 @@
         "require-dev": {
             "phpunit/phpunit": "~3.7"
         },
-        "time": "2014-05-21 19:28:51",
+        "time": "2014-05-21T19:28:51+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -647,7 +647,7 @@
             "ocramius/proxy-manager": ">=0.3.1,<0.6-dev",
             "propel/propel1": "1.6.*"
         },
-        "time": "2014-07-15 15:39:46",
+        "time": "2014-07-15T15:39:46+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -696,12 +696,12 @@
         "target-dir": "Symfony/Component/Icu",
         "source": {
             "type": "git",
-            "url": "https://github.com/symfony/Icu.git",
+            "url": "https://github.com/symfony/icu.git",
             "reference": "98e197da54df1f966dd5e8a4992135703569c987"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/symfony/Icu/zipball/98e197da54df1f966dd5e8a4992135703569c987",
+            "url": "https://api.github.com/repos/symfony/icu/zipball/98e197da54df1f966dd5e8a4992135703569c987",
             "reference": "98e197da54df1f966dd5e8a4992135703569c987",
             "shasum": ""
         },
@@ -710,7 +710,7 @@
             "php": ">=5.3.3",
             "symfony/intl": "~2.3"
         },
-        "time": "2013-10-04 10:06:38",
+        "time": "2013-10-04T10:06:38+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -737,7 +737,8 @@
         "keywords": [
             "icu",
             "intl"
-        ]
+        ],
+        "abandoned": "symfony/intl"
     },
     {
         "name": "doctrine/dbal",
@@ -765,7 +766,7 @@
         "suggest": {
             "symfony/console": "Allows use of the command line interface"
         },
-        "time": "2014-01-01 16:43:57",
+        "time": "2014-01-01T16:43:57+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -839,7 +840,7 @@
             "doctrine/orm": "The Doctrine ORM integration is optional in the bundle.",
             "symfony/web-profiler-bundle": "to use the data collector"
         },
-        "time": "2013-03-25 20:13:59",
+        "time": "2013-03-25T20:13:59+00:00",
         "type": "symfony-bundle",
         "extra": {
             "branch-alias": {
@@ -919,7 +920,7 @@
             "ptachoire/cssembed": "Assetic provides the integration with phpcssembed to embed data uris",
             "twig/twig": "Assetic provides the integration with the Twig templating engine"
         },
-        "time": "2013-07-19 00:03:27",
+        "time": "2013-07-19T00:03:27+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -961,12 +962,12 @@
         "target-dir": "Symfony/Bundle/AsseticBundle",
         "source": {
             "type": "git",
-            "url": "https://github.com/symfony/AsseticBundle.git",
+            "url": "https://github.com/symfony/assetic-bundle.git",
             "reference": "146dd3cb46b302bd471560471c6aaa930483dac1"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/symfony/AsseticBundle/zipball/146dd3cb46b302bd471560471c6aaa930483dac1",
+            "url": "https://api.github.com/repos/symfony/assetic-bundle/zipball/146dd3cb46b302bd471560471c6aaa930483dac1",
             "reference": "146dd3cb46b302bd471560471c6aaa930483dac1",
             "shasum": ""
         },
@@ -987,7 +988,7 @@
         "suggest": {
             "symfony/twig-bundle": "~2.1"
         },
-        "time": "2013-05-16 05:32:23",
+        "time": "2013-05-16T05:32:23+00:00",
         "type": "symfony-bundle",
         "extra": {
             "branch-alias": {
@@ -1048,7 +1049,7 @@
         "suggest": {
             "symfony/yaml": "If you want to use YAML Metadata Mapping Driver"
         },
-        "time": "2014-07-11 03:05:53",
+        "time": "2014-07-11T03:05:53+00:00",
         "bin": [
             "bin/doctrine",
             "bin/doctrine.php"
@@ -1103,19 +1104,19 @@
         "version_normalized": "1.1.0.0",
         "source": {
             "type": "git",
-            "url": "https://github.com/fabpot/Twig-extensions.git",
+            "url": "https://github.com/twigphp/Twig-extensions.git",
             "reference": "c0ab818595338dd5569369bfce2552d02cec5d50"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/fabpot/Twig-extensions/zipball/c0ab818595338dd5569369bfce2552d02cec5d50",
+            "url": "https://api.github.com/repos/twigphp/Twig-extensions/zipball/c0ab818595338dd5569369bfce2552d02cec5d50",
             "reference": "c0ab818595338dd5569369bfce2552d02cec5d50",
             "shasum": ""
         },
         "require": {
             "twig/twig": "~1.12"
         },
-        "time": "2014-07-05 10:01:35",
+        "time": "2014-07-05T10:01:35+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -1168,7 +1169,7 @@
         "require-dev": {
             "mockery/mockery": "~0.9.1"
         },
-        "time": "2014-06-13 11:44:54",
+        "time": "2014-06-13T11:44:54+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -1210,12 +1211,12 @@
         "target-dir": "Symfony/Bundle/SwiftmailerBundle",
         "source": {
             "type": "git",
-            "url": "https://github.com/symfony/SwiftmailerBundle.git",
+            "url": "https://github.com/symfony/swiftmailer-bundle.git",
             "reference": "e98defd402f72e8b54a029ba4d3ac4cb51dc3577"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/symfony/SwiftmailerBundle/zipball/e98defd402f72e8b54a029ba4d3ac4cb51dc3577",
+            "url": "https://api.github.com/repos/symfony/swiftmailer-bundle/zipball/e98defd402f72e8b54a029ba4d3ac4cb51dc3577",
             "reference": "e98defd402f72e8b54a029ba4d3ac4cb51dc3577",
             "shasum": ""
         },
@@ -1230,7 +1231,7 @@
             "symfony/http-kernel": "~2.1",
             "symfony/yaml": "~2.1"
         },
-        "time": "2014-04-05 17:15:52",
+        "time": "2014-04-05T17:15:52+00:00",
         "type": "symfony-bundle",
         "extra": {
             "branch-alias": {
@@ -1299,7 +1300,7 @@
             "rollbar/rollbar": "Allow sending log messages to Rollbar",
             "ruflin/elastica": "Allow sending log messages to an Elastic Search server"
         },
-        "time": "2014-06-04 16:30:04",
+        "time": "2014-06-04T16:30:04+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -1339,12 +1340,12 @@
         "target-dir": "Symfony/Bundle/MonologBundle",
         "source": {
             "type": "git",
-            "url": "https://github.com/symfony/MonologBundle.git",
+            "url": "https://github.com/symfony/monolog-bundle.git",
             "reference": "e1d4aa99c7440b11e9dfbfef7ed63084401dbc6a"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/symfony/MonologBundle/zipball/e1d4aa99c7440b11e9dfbfef7ed63084401dbc6a",
+            "url": "https://api.github.com/repos/symfony/monolog-bundle/zipball/e1d4aa99c7440b11e9dfbfef7ed63084401dbc6a",
             "reference": "e1d4aa99c7440b11e9dfbfef7ed63084401dbc6a",
             "shasum": ""
         },
@@ -1360,7 +1361,7 @@
             "symfony/console": "~2.3",
             "symfony/yaml": "~2.3"
         },
-        "time": "2014-06-04 16:49:13",
+        "time": "2014-06-04T16:49:13+00:00",
         "type": "symfony-bundle",
         "extra": {
             "branch-alias": {
@@ -1426,7 +1427,7 @@
             "symfony/validator": "~2.2",
             "symfony/yaml": "~2.2"
         },
-        "time": "2014-06-06 02:53:20",
+        "time": "2014-06-06T02:53:20+00:00",
         "type": "symfony-bundle",
         "extra": {
             "branch-alias": {
@@ -1485,7 +1486,7 @@
             "symfony/expression-language": "",
             "symfony/security-bundle": ""
         },
-        "time": "2014-05-22 23:27:44",
+        "time": "2014-05-22T23:27:44+00:00",
         "type": "symfony-bundle",
         "extra": {
             "branch-alias": {
@@ -1541,7 +1542,7 @@
             "phpspec/prophecy-phpunit": "~1.0",
             "symfony/filesystem": "~2.2"
         },
-        "time": "2013-12-07 10:10:39",
+        "time": "2013-12-07T10:10:39+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -1595,7 +1596,7 @@
             "symfony/doctrine-bridge": "~2.2",
             "twig/twig": "~1.11"
         },
-        "time": "2014-04-28 14:01:06",
+        "time": "2014-04-28T14:01:06+00:00",
         "type": "symfony-bundle",
         "extra": {
             "branch-alias": {
@@ -1654,7 +1655,7 @@
         "suggest": {
             "willdurand/propel-typehintable-behavior": "Needed when using the propel implementation"
         },
-        "time": "2014-10-20 09:15:23",
+        "time": "2014-10-20T09:15:23+00:00",
         "type": "symfony-bundle",
         "extra": {
             "branch-alias": {
@@ -1724,7 +1725,7 @@
             "doctrine/mongodb-odm": ">=1.0.0-BETA7",
             "doctrine/orm": ">=2.3.2"
         },
-        "time": "2014-01-12 16:34:06",
+        "time": "2014-01-12T16:34:06+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -1798,7 +1799,7 @@
             "doctrine/doctrine-bundle": "to use the ORM extensions",
             "doctrine/mongodb-odm-bundle": "to use the MongoDB ODM extensions"
         },
-        "time": "2013-06-23 16:53:41",
+        "time": "2013-06-23T16:53:41+00:00",
         "type": "symfony-bundle",
         "extra": {
             "branch-alias": {
@@ -1844,12 +1845,12 @@
         "target-dir": "APY/DataGridBundle",
         "source": {
             "type": "git",
-            "url": "https://github.com/Abhoryo/APYDataGridBundle.git",
+            "url": "https://github.com/APY/APYDataGridBundle.git",
             "reference": "4192fd0f6e6d6a3788e68029ac7cf64b8dd6ddfd"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/Abhoryo/APYDataGridBundle/zipball/4192fd0f6e6d6a3788e68029ac7cf64b8dd6ddfd",
+            "url": "https://api.github.com/repos/APY/APYDataGridBundle/zipball/4192fd0f6e6d6a3788e68029ac7cf64b8dd6ddfd",
             "reference": "4192fd0f6e6d6a3788e68029ac7cf64b8dd6ddfd",
             "shasum": ""
         },
@@ -1863,7 +1864,7 @@
             "ext-intl": "Translate the grid",
             "ext-mbstring": "Convert your data with the right charset"
         },
-        "time": "2013-12-16 16:34:58",
+        "time": "2013-12-16T16:34:58+00:00",
         "type": "symfony-bundle",
         "extra": {
             "branch-alias": {
@@ -1896,6 +1897,179 @@
         "keywords": [
             "datagrid",
             "symfony"
+        ]
+    },
+    {
+        "name": "willdurand/jsonp-callback-validator",
+        "version": "v1.1.0",
+        "version_normalized": "1.1.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/willdurand/JsonpCallbackValidator.git",
+            "reference": "1a7d388bb521959e612ef50c5c7b1691b097e909"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/willdurand/JsonpCallbackValidator/zipball/1a7d388bb521959e612ef50c5c7b1691b097e909",
+            "reference": "1a7d388bb521959e612ef50c5c7b1691b097e909",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.0"
+        },
+        "require-dev": {
+            "phpunit/phpunit": "~3.7"
+        },
+        "time": "2014-01-20T22:35:06+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-0": {
+                "JsonpCallbackValidator": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "William Durand",
+                "email": "william.durand1@gmail.com",
+                "homepage": "http://www.willdurand.fr"
+            }
+        ],
+        "description": "JSONP callback validator."
+    },
+    {
+        "name": "willdurand/negotiation",
+        "version": "1.5.0",
+        "version_normalized": "1.5.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/willdurand/Negotiation.git",
+            "reference": "2a59f2376557303e3fa91465ab691abb82945edf"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/willdurand/Negotiation/zipball/2a59f2376557303e3fa91465ab691abb82945edf",
+            "reference": "2a59f2376557303e3fa91465ab691abb82945edf",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.0"
+        },
+        "time": "2015-10-01T07:42:40+00:00",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "1.5-dev"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Negotiation\\": "src/Negotiation"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "William Durand",
+                "email": "william.durand1@gmail.com"
+            }
+        ],
+        "description": "Content Negotiation tools for PHP provided as a standalone library.",
+        "homepage": "http://williamdurand.fr/Negotiation/",
+        "keywords": [
+            "accept",
+            "content",
+            "format",
+            "header",
+            "negotiation"
+        ]
+    },
+    {
+        "name": "friendsofsymfony/rest-bundle",
+        "version": "1.5.3",
+        "version_normalized": "1.5.3.0",
+        "target-dir": "FOS/RestBundle",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/FriendsOfSymfony/FOSRestBundle.git",
+            "reference": "fdd21c4c0cb6222ae37efc9362c6a96bd1432412"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/FriendsOfSymfony/FOSRestBundle/zipball/fdd21c4c0cb6222ae37efc9362c6a96bd1432412",
+            "reference": "fdd21c4c0cb6222ae37efc9362c6a96bd1432412",
+            "shasum": ""
+        },
+        "require": {
+            "doctrine/inflector": "~1.0",
+            "php": ">=5.3.9",
+            "psr/log": "~1.0",
+            "symfony/framework-bundle": "~2.2",
+            "willdurand/jsonp-callback-validator": "~1.0",
+            "willdurand/negotiation": "~1.2"
+        },
+        "conflict": {
+            "jms/serializer": "<0.12",
+            "jms/serializer-bundle": "<0.11"
+        },
+        "require-dev": {
+            "jms/serializer-bundle": "~0.12",
+            "sensio/framework-extra-bundle": "~2.2",
+            "symfony/form": "~2.2",
+            "symfony/security": "~2.2",
+            "symfony/serializer": "~2.2",
+            "symfony/validator": "~2.2",
+            "symfony/yaml": "~2.2"
+        },
+        "suggest": {
+            "jms/serializer-bundle": "Add support for advanced serialization capabilities, recommended, requires ~0.12",
+            "sensio/framework-extra-bundle": "Add support for route annotations and the view response listener",
+            "symfony/serializer": "Add support for basic serialization capabilities and xml decoding, requires ~2.2",
+            "symfony/validator": "Add support for validation capabilities in the ParamFetcher, requires ~2.2"
+        },
+        "time": "2015-02-16T15:26:12+00:00",
+        "type": "symfony-bundle",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "1.5-dev"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-0": {
+                "FOS\\RestBundle": ""
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Lukas Kahwe Smith",
+                "email": "smith@pooteeweet.org"
+            },
+            {
+                "name": "FriendsOfSymfony Community",
+                "homepage": "https://github.com/friendsofsymfony/FOSRestBundle/contributors"
+            },
+            {
+                "name": "Konstantin Kudryashov",
+                "email": "ever.zet@gmail.com"
+            }
+        ],
+        "description": "This Bundle provides various tools to rapidly develop RESTful API's with Symfony2",
+        "homepage": "http://friendsofsymfony.github.com",
+        "keywords": [
+            "rest"
         ]
     }
 ]
