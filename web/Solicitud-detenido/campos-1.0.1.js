@@ -1040,23 +1040,42 @@ function recuperarAgencia(ruc, idEmp){
     });
 }
 
-function recuperarAgencia(ruc, idEmp){
+function recuperarAgente(user, idEmp ,pwd){
 	 $.ajax({
         type: "POST",
-        data: {action: 'dbAgencia', id: ruc, emp : idEmp},
+        data: {action: 'dbInfoAgente', id: user, ag : idEmp, pass:pwd},
         url: 'DBJSONInt.php',        
         success: function (data) {
+            $("#hdnIdAgente").val("");			
+            $("#inputAgente").val("");		
+            $("#inputPwdAgente").val("");		            
+            $("#inputCorreo").val("");			
+            $("#inputTelefono").val("");			
+            $("#inputCelular").val("");		
+            $("#inputRuc").val("");		
             $("#inputAgencia").val("");		
-            $("#hdnIdAgencia").val("");			
+            $("#hdnIdAgencia").val("");		            
             var obj = JSON.parse(data);
-			if(obj.error > 0 ){
-				$("#inputRuc").val("");
-				PopupMen(obj.error);
-			}
-			else{			
-				$("#inputAgencia").val(obj.nombre);		
-				$("#hdnIdAgencia").val(obj.id);
-			}
+            if(obj.error > 0 ){
+		$("#inputUsuarioAgente").val("");
+                if (obj.error === 41) {
+                    PopupMen(obj.error, obj.times);
+                }else{
+                    PopupMen(obj.error);
+                }
+            }
+            else{
+                $("#hdnIdAgente").val(obj.id);			
+                $("#inputAgente").val(obj.nombre + " " + obj.apellidos);
+                $("#inputCorreo").val(obj.email);			
+                $("#inputTelefono").val(obj.telefono);			
+                $("#inputCelular").val(obj.celular);	
+                $("#inputRuc").val(obj.ruc);		
+                $("#inputAgencia").val(obj.nombreAgencia);		
+                $("#hdnIdAgencia").val(obj.idAG);	
+                $("#inputPwdAgente").attr("readonly","true");
+                $("#inputPwdAgente").css("background-color","#CCCCCC");
+            }
         }
     });
 }

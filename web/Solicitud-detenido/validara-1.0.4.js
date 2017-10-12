@@ -164,7 +164,7 @@ function validaForm(){
         var errorOrden=false;
         //validar numero de orden 
         if($('#selectServicio').val() === 'REVISION' || $('#selectServicio').val() === 'ANULACION' ){
-            alert(recuperarOrden(form.inputOrden.value,'emision'));
+            //alert(recuperarOrden(form.inputOrden.value,'emision'));
              if(!recuperarOrden(form.inputOrden.value,'emision')){
                  errorOrden=true;
              }

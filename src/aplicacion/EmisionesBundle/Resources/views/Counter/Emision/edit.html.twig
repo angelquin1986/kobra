@@ -427,6 +427,7 @@
         data.idProcesadaEmergencia=$('#idProcesadaEmergencia').val();
         data.idTipo = $('#idTipo').val();
         data.idTipoBoleto = $('#idTipoBoleto').val();
+        data.idnumeroOrden=$('#idnumeroOrden').val();
         $.ajax({
                 url : "{{ path('rest_homepage') }}",
                 type: "POST",

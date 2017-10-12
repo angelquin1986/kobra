@@ -23,6 +23,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Cookie;
+use \aplicacion\EmisionesBundle\Entity\Aerolinea;
 
 
 /**
@@ -139,6 +140,14 @@ class CyborgController extends Controller
          $orden->setFeeServicios($valoresFee['fee']);
          $orden->setFeeEmergenciaServicios($valoresFee['feeEmergente']);
          $orden->setAerolinea($idAerolineaFee);
+         $aerolinea =$em->getRepository('EmisionesBundle:Aerolinea')->find($idAerolineaFee);
+         if($aerolinea instanceof Aerolinea){
+              $orden->setAerolineaEntidad($aerolinea);
+         }else{
+            $result['respuesta']='Error';
+            $result['detalle_respuesta']='No existe el arolinea o ha sido elimnado.';
+            return new Response(json_encode($result));
+         }
          $agente=$em->getRepository('EmisionesBundle:Agente')->find($data['agente']);
          if($agente instanceof  Agente)
          {

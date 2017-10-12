@@ -18,8 +18,13 @@ class DefaultController extends FOSRestController{
        $this->container->get('logger')->error('calcularFee',  array('inicio' => $data));
              
        $feeServices = $this->get('FeeServices');
+       $origen ='F';
+       $this->container->get('logger')->error('tomar primer numero del formulario',  array('numero' => substr($data['idnumeroOrden'],0,1)));
+       if($data['idnumeroOrden'] && substr($data['idnumeroOrden'],0,1)!='1'){
+           $origen ='E';
+       }
        $feeResultado = $feeServices->calcularFee(
-                $data['idProcesadaEmergencia'], $data['aerolinea'],$data['idTipoBoleto'],$data['idTipo'],'F');
+                $data['idProcesadaEmergencia'], $data['aerolinea'],$data['idTipoBoleto'],$data['idTipo'],$origen);
         
         $view = View::create();
         $view->setData($feeResultado);
